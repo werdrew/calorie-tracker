@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import LoginPage from './components/loginPage/loginPage';
 import RegisterPage from './components/loginPage/registerPage';
 import HomePage from './components/home/homePage'
@@ -41,6 +41,12 @@ export default class CS3200Project extends React.Component {
                         <Typography color="textPrimary" variant="h6">
                             CS3200 Project
                         </Typography>
+                        {this.state.loggedIn &&
+                            <div>
+                                <Link className="appBarLink" to={`/${this.state.username}/food`}>Food Log</Link>
+                                <Link className="appBarLink" to={`/${this.state.username}/activity`}>Activity Log</Link>
+                            </div>
+                        }
                     </Toolbar>
                 </AppBar>
                 <Switch>

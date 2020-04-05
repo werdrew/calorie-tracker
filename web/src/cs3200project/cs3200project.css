@@ -3,3 +3,8 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.appBarLink {
+    color: black;
+    margin-left: 20px;
+}
