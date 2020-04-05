@@ -1,0 +1,39 @@
+#registerPage .paper {
+    width: 50%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+#registerPage .MuiTypography-root {
+    margin: 10px;
+}
+
+#registerPage .registerField {
+    margin: 10px;
+    align-self: center;
+    width: 50%;
+}
+
+#registerPage #registerButton {
+    margin: 10px;
+    margin-top: 20px;
+    align-self: center;
+    width: 20%;
+}
+
+#registerPage #registerRadioGroup {
+    margin: 5px;
+    align-self: center;
+}
+
+#registerPage #registerFormLabel {
+    margin-top: 20px;
+    align-self: center;
+}
+
+#registerPage .registerDobFormControl {
+    margin: 10px;
+    align-self: center;
+    width: 30%;
+}

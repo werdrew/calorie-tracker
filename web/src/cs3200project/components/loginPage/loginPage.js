@@ -1,6 +1,6 @@
 import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import { Button, TextField, Typography } from '@material-ui/core'
+import { Button, Paper, TextField, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import './loginPage.css';
 
 export default class LoginPage extends React.Component {
@@ -34,12 +34,13 @@ export default class LoginPage extends React.Component {
 
                     <Button
                         id="loginButton"
+                        variant="outlined"
                         onClick={() => this.props.onSubmitLoginButton(this.state)}>
                         Login
                     </Button>
 
                     <Typography variant="h6">
-                        Don't have an account? Register here.
+                        Don't have an account? <Link to='/register'>Register today.</Link>
                     </Typography>
                 </Paper>
             </div>

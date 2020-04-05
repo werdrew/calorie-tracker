@@ -10,7 +10,7 @@
 }
 
 #loginPage .loginField {
-    margin-top: 10px;
+    margin: 10px;
     align-self: center;
     width: 50%;
 }
@@ -21,8 +21,3 @@
     align-self: center;
     width: 20%;
 }
-
-/* #loginPage .MuiInputBase-root {
-    align-self: center;
-    width: 50%;
-} */
