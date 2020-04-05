@@ -25,6 +25,7 @@
 #registerPage #registerRadioGroup {
     margin: 5px;
     align-self: center;
+    flex-direction: row;
 }
 
 #registerPage #registerFormLabel {
@@ -32,8 +33,13 @@
     align-self: center;
 }
 
+#registerPage #registerDob {
+    display: flex;
+    justify-content: center;
+}
+
 #registerPage .registerDobFormControl {
     margin: 10px;
     align-self: center;
-    width: 30%;
+    width: 15%;
 }
