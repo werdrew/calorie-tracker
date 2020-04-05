@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LoginPage from './components/loginPage/loginPage';
 import RegisterPage from './components/loginPage/registerPage';
@@ -35,6 +36,13 @@ export default class CS3200Project extends React.Component {
     render() {
         return (
             <div>
+                <AppBar color="inherit" position="static">
+                    <Toolbar>
+                        <Typography color="textPrimary" variant="h6">
+                            CS3200 Project
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
                 <Switch>
                     <Route path='/register'>
                         {this.state.loggedIn
