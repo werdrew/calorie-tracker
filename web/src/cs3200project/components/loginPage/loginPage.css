@@ -1,0 +1,28 @@
+#loginPage .paper {
+    width: 50%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+#loginPage .MuiTypography-root {
+    margin: 10px;
+}
+
+#loginPage .loginField {
+    margin-top: 10px;
+    align-self: center;
+    width: 50%;
+}
+
+#loginPage #loginButton {
+    margin: 10px;
+    margin-top: 20px;
+    align-self: center;
+    width: 20%;
+}
+
+/* #loginPage .MuiInputBase-root {
+    align-self: center;
+    width: 50%;
+} */
