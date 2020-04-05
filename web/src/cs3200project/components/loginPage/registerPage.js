@@ -1,5 +1,6 @@
 import React from 'react';
 import { 
+    Container,
     FormControlLabel, FormControl, FormLabel, 
     Radio, RadioGroup, InputLabel, Select,
     MenuItem,
@@ -45,7 +46,7 @@ export default class RegisterPage extends React.Component {
                         onChange={e => this.setState({ password: e.target.value })}/>
 
                     <FormLabel id='registerFormLabel'>Sex</FormLabel>
-                    <RadioGroup id="registerRadioGroup" aria-label="position" name="position" value={this.state.sex || "M"}>
+                    <RadioGroup id="registerRadioGroup" value={this.state.sex || "M"}>
                         <FormControlLabel
                         control={<Radio color="primary" />}
                         label="Male"
@@ -63,7 +64,7 @@ export default class RegisterPage extends React.Component {
                     </RadioGroup>
 
                     <FormLabel id='registerFormLabel'>Date of Birth</FormLabel>
-                    <div className="registerDob">
+                    <Container id="registerDob">
                         <FormControl className="registerDobFormControl" variant="outlined">
                             <InputLabel id="monthInputLabel">Month</InputLabel>
                                 <Select
@@ -105,7 +106,7 @@ export default class RegisterPage extends React.Component {
                                 })}
                             </Select>
                         </FormControl>
-                    </div>
+                    </Container>
 
                     <TextField 
                         variant="outlined"
@@ -127,7 +128,7 @@ export default class RegisterPage extends React.Component {
                     </Button>
 
                     <Typography variant="h6">
-                        Nevermind, I want to go <Link to='/'>back.</Link>
+                        Already have an account? <Link to='/'>Sign in instead.</Link>
                     </Typography>
                 </Paper>
             </div>
