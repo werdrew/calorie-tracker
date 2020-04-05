@@ -2,6 +2,8 @@ import React from 'react';
 import CS3200Project from './cs3200project/cs3200project';
 import { BrowserRouter } from 'react-router-dom';
 
+require('dotenv').config();
+
 function App() {
   return (
     <div className="App">
