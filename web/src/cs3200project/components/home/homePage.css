@@ -1,0 +1,16 @@
+#homePage {
+    display: flex;
+    flex-direction: column;
+}
+#homePage #homePageContent {
+    background-image: url("/homepage_cover.jpeg");
+    width: 100%;
+    height: 100vh;
+    opacity: 70%;
+}
+
+#homePage #homePageContent .homePageText {
+    margin: 50px;
+    color: white;
+    text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+}

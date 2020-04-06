@@ -69,6 +69,8 @@ export default class CS3200Project extends React.Component {
                         </Typography>
                         {this.state.loggedIn &&
                             <div>
+                                <Link className="appBarLink" to={`/`}>Home</Link>
+                                <Link className="appBarLink" to={`/${this.state.username}/profile`}>Profile</Link>
                                 <Link className="appBarLink" to={`/${this.state.username}/food`}>Food Log</Link>
                                 <Link className="appBarLink" to={`/${this.state.username}/activity`}>Activity Log</Link>
                             </div>
@@ -84,6 +86,9 @@ export default class CS3200Project extends React.Component {
                                 registrationFailed={this.state.registrationFailed}/>
                         }
                     </Route>
+                    {/* <Route path={`/${this.state.username}/profile`}>
+                        
+                    </Route> */}
                     <Route path='/'>
                         {this.state.loggedIn
                         ? <HomePage 
