@@ -13,19 +13,20 @@ export default class CS3200Project extends React.Component {
         this.state = {
             loggedIn: false,
             username: undefined,
-            loginFailed: false
+            loginFailed: false,
+            registrationFailed: false
         };
         this.userService = new UserService();
     }
 
-    async onSubmitLoginButton(info) {
+    async onSubmitLoginButton(formData) {
         try {
-            const data = await this.userService.login(info.username, info.password);
+            const data = await this.userService.login(formData);
             const loggedIn = data.success;
             if (loggedIn) {
                 this.setState({
                     loggedIn: true,
-                    username: info.username
+                    username: formData.username
                 });
             }
             else {
@@ -38,16 +39,24 @@ export default class CS3200Project extends React.Component {
         }
     }
 
-    async onSubmitRegisterButton(info) {
-        // try {
-        //     await UserService.register(info.username, info.password);
-        //     this.setState({
-        //         loggedIn: true,
-        //         username: info.username
-        //     });
-        // } catch (e) {
-        //     console.error(`Failed to register user! ${e}`);
-        // }
+    async onSubmitRegisterButton(formData) {
+        try {
+            const data = await this.userService.register(formData);
+            const registered = data.success;
+            if (registered) {
+                this.setState({
+                    loggedIn: true,
+                    username: formData.username
+                });
+            }
+            else {
+                this.setState({
+                    registrationFailed: true
+                });
+            }
+        } catch (e) {
+            console.error(`Failed to log in! ${e}`);
+        }
     }
 
     render() {
@@ -71,7 +80,8 @@ export default class CS3200Project extends React.Component {
                         {this.state.loggedIn
                             ? <Redirect to='/'/>
                             : <RegisterPage
-                            onSubmitRegisterButton={this.onSubmitRegisterButton.bind(this)}/>
+                                onSubmitRegisterButton={this.onSubmitRegisterButton.bind(this)}
+                                registrationFailed={this.state.registrationFailed}/>
                         }
                     </Route>
                     <Route path='/'>

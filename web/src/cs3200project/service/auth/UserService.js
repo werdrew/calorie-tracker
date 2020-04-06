@@ -5,19 +5,28 @@ export default class UserService {
         this.BASE_URL = `http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
     }
 
-    async login(username, password) {
-        // const res = false;
+    async login(formData) {
         const response = await axios
-            .post(this.BASE_URL + '/login', {
-                username,
-                password
-            })
+            .post(this.BASE_URL + '/login', formData)
             .then(res => {
                 return res;
             })
             .catch(e => {
                 console.log(`Error logging in (front-end!): ${e.message}`)
+            });
+        return response.data;
+    }
+
+    async register(formData) {
+        const response = await axios
+            .post(this.BASE_URL + '/register', formData)
+            .then(res => {
+                return res;
             })
+            .catch(e => {
+                console.log(`Error registering (front-end!): ${e.message}`);
+            });
+        console.log(response);
         return response.data;
     }
 }

@@ -15,7 +15,7 @@ export default class RegisterPage extends React.Component {
         this.state = {
             username: null,
             password: null,
-            sex: null,
+            sex: 'M',
             month: null,
             day: null,
             year: null,
@@ -119,6 +119,12 @@ export default class RegisterPage extends React.Component {
                         label="Weight"
                         className="registerField"
                         onChange={e => this.setState({ weight: e.target.value })}/>
+
+                    {this.props.registrationFailed &&
+                        <Typography varian="h6" color="error">
+                            Registration failed!    
+                        </Typography>
+                    }
 
                     <Button
                         id="registerButton"
