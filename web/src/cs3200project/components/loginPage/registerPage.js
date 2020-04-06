@@ -12,13 +12,14 @@ import './registerPage.css';
 export default class RegisterPage extends React.Component {
     constructor(props) {
         super(props)
+        this.today = new Date();
         this.state = {
             username: null,
             password: null,
             sex: 'M',
-            month: null,
-            day: null,
-            year: null,
+            month: this.today.getMonth() + 1,
+            day: this.today.getDate(),
+            year: this.today.getYear() + 1900,
             height: null,
             weight: null
         };
@@ -69,7 +70,7 @@ export default class RegisterPage extends React.Component {
                             <InputLabel id="monthInputLabel">Month</InputLabel>
                                 <Select
                                 id="monthDropdown"
-                                value={this.state.month || this.today.getMonth() + 1}
+                                value={this.state.month}
                                 onChange={e => this.setState({ month: e.target.value })}
                                 label="Month"
                                 >
@@ -83,7 +84,7 @@ export default class RegisterPage extends React.Component {
                             <InputLabel id="dayInputLabel">Day</InputLabel>
                                 <Select
                                 labelId="dayDropdown"
-                                value={this.state.day || this.today.getDate()}
+                                value={this.state.day}
                                 onChange={e => this.setState({ day: e.target.value })}
                                 label="Day"
                                 >
@@ -97,7 +98,7 @@ export default class RegisterPage extends React.Component {
                             <InputLabel id="yearInputLabel">Year</InputLabel>
                                 <Select
                                 labelId="yearDropdown"
-                                value={this.state.year || this.today.getYear() + 1900}
+                                value={this.state.year}
                                 onChange={e => this.setState({ year: e.target.value })}
                                 label="Year"
                                 >
