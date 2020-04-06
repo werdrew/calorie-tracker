@@ -39,6 +39,12 @@ export default class LoginPage extends React.Component {
                         Login
                     </Button>
 
+                    {this.props.loginFailed &&
+                        <Typography varian="h6" color="error">
+                            Login failed!    
+                        </Typography>
+                    }
+
                     <Typography variant="h6">
                         Don't have an account? <Link to='/register'>Register today.</Link>
                     </Typography>

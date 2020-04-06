@@ -1,36 +1,53 @@
 import React from 'react';
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Toolbar, Typography } from '@material-ui/core'
 import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import LoginPage from './components/loginPage/loginPage';
 import RegisterPage from './components/loginPage/registerPage';
-import HomePage from './components/home/homePage'
-import './cs3200project.css'
+import UserService from './service/auth/UserService';
+import HomePage from './components/home/homePage';
+import './cs3200project.css';
 
 export default class CS3200Project extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             loggedIn: false,
-            username: undefined
+            username: undefined,
+            loginFailed: false
+        };
+        this.userService = new UserService();
+    }
+
+    async onSubmitLoginButton(info) {
+        try {
+            const data = await this.userService.login(info.username, info.password);
+            const loggedIn = data.success;
+            if (loggedIn) {
+                this.setState({
+                    loggedIn: true,
+                    username: info.username
+                });
+            }
+            else {
+                this.setState({
+                    loginFailed: true
+                });
+            }
+        } catch (e) {
+            console.error(`Failed to log in! ${e}`);
         }
     }
 
-    onSubmitLoginButton(info) {
-        /* TODO: Call a service to checek the info against DB. */
-        this.setState({
-            loggedIn: true,
-            username: info.username
-        });
-    }
-
-    onSubmitRegisterButton(info) {
-        /* TODO: Call a service to create a record for the user
-        and do data validation. */
-
-        this.setState({
-            loggedIn: true,
-            username: info.username
-        })
+    async onSubmitRegisterButton(info) {
+        // try {
+        //     await UserService.register(info.username, info.password);
+        //     this.setState({
+        //         loggedIn: true,
+        //         username: info.username
+        //     });
+        // } catch (e) {
+        //     console.error(`Failed to register user! ${e}`);
+        // }
     }
 
     render() {
@@ -62,7 +79,8 @@ export default class CS3200Project extends React.Component {
                         ? <HomePage 
                             username={this.state.username}/>
                         : <LoginPage 
-                            onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}/>}
+                            onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}
+                            loginFailed={this.state.loginFailed}/>}
                     </Route>
                 </Switch>
             </div>
