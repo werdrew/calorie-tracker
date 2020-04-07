@@ -43,24 +43,25 @@ export default class RegisterPage extends React.Component {
                     <TextField
                         variant="outlined"
                         label="Password"
+                        type="password"
                         className="registerField"
                         onChange={e => this.setState({ password: e.target.value })}/>
 
                     <FormLabel id='registerFormLabel'>Sex</FormLabel>
                     <RadioGroup id="registerRadioGroup" value={this.state.sex || "M"}>
                         <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Male"
-                        labelPlacement="end"
-                        value="M"
-                        onChange={e => this.setState({ sex: 'M' })}
+                            control={<Radio color="primary" />}
+                            label="Male"
+                            labelPlacement="end"
+                            value="M"
+                            onChange={e => this.setState({ sex: 'M' })}
                         />
                         <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Female"
-                        labelPlacement="end"
-                        value="F"
-                        onChange={e => this.setState({ sex: 'F' })}
+                            control={<Radio color="primary" />}
+                            label="Female"
+                            labelPlacement="end"
+                            value="F"
+                            onChange={e => this.setState({ sex: 'F' })}
                         />
                     </RadioGroup>
 
@@ -69,15 +70,15 @@ export default class RegisterPage extends React.Component {
                         <FormControl className="registerDobFormControl" variant="outlined">
                             <InputLabel id="monthInputLabel">Month</InputLabel>
                                 <Select
-                                id="monthDropdown"
-                                value={this.state.month}
-                                onChange={e => this.setState({ month: e.target.value })}
-                                label="Month"
-                                >
-                                {[...Array(12).keys()].map(index => {
-                                    return <MenuItem value={index + 1}>{index + 1}</MenuItem>
-                                })}
-                            </Select>
+                                    id="monthDropdown"
+                                    value={this.state.month}
+                                    onChange={e => this.setState({ month: e.target.value })}
+                                    label="Month"
+                                    >
+                                    {[...Array(12).keys()].map(index => {
+                                        return <MenuItem value={index + 1}>{index + 1}</MenuItem>
+                                    })}
+                                </Select>
                         </FormControl>
 
                         <FormControl className="registerDobFormControl" variant="outlined">
@@ -135,7 +136,7 @@ export default class RegisterPage extends React.Component {
                     </Button>
 
                     <Typography variant="h6">
-                        Already have an account? <Link to='/'>Sign in instead.</Link>
+                        Already have an account? <Link to='/login'>Sign in instead.</Link>
                     </Typography>
                 </Paper>
             </div>

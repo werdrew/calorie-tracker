@@ -5,6 +5,7 @@ import LoginPage from './components/loginPage/loginPage';
 import RegisterPage from './components/loginPage/registerPage';
 import UserService from './service/auth/UserService';
 import HomePage from './components/home/homePage';
+import ProfilePage from './components/profile/profilePage'
 import './cs3200project.css';
 
 export default class CS3200Project extends React.Component {
@@ -67,12 +68,16 @@ export default class CS3200Project extends React.Component {
                         <Typography color="textPrimary" variant="h6">
                             CS3200 Project
                         </Typography>
-                        {this.state.loggedIn &&
-                            <div>
-                                <Link className="appBarLink" to={`/`}>Home</Link>
-                                <Link className="appBarLink" to={`/${this.state.username}/profile`}>Profile</Link>
-                                <Link className="appBarLink" to={`/${this.state.username}/food`}>Food Log</Link>
-                                <Link className="appBarLink" to={`/${this.state.username}/activity`}>Activity Log</Link>
+                        {this.state.loggedIn
+                            ? <div>
+                                <Link className="appBarLink" to={`/home`}>Home</Link>
+                                <Link className="appBarLink" to={`/profile`}>Profile</Link>
+                                <Link className="appBarLink" to={`/nutrition`}>Nutrition</Link>
+                                <Link className="appBarLink" to={`/activity`}>Activity</Link>
+                            </div>
+                            : <div>
+                                <Link className="appBarLink" to={`/login`}>Login</Link>
+                                <Link className="appBarLink" to={`/register`}>Register</Link>
                             </div>
                         }
                     </Toolbar>
@@ -80,22 +85,47 @@ export default class CS3200Project extends React.Component {
                 <Switch>
                     <Route path='/register'>
                         {this.state.loggedIn
-                            ? <Redirect to='/'/>
+                            ? <Redirect to='/home'/>
                             : <RegisterPage
                                 onSubmitRegisterButton={this.onSubmitRegisterButton.bind(this)}
                                 registrationFailed={this.state.registrationFailed}/>
                         }
                     </Route>
-                    {/* <Route path={`/${this.state.username}/profile`}>
-                        
+                    <Route path='/login'>
+                        {this.state.loggedIn
+                            ? <Redirect to='/home'/>
+                            : <LoginPage 
+                                onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}
+                                loginFailed={this.state.loginFailed}/>
+                        }                    
+                    </Route>
+                    <Route path='/home'>
+                        {this.state.loggedIn
+                            ? <HomePage 
+                                username={this.state.username}
+                                loggedIn={this.state.loggedIn}/>
+                            : <Redirect to='/login'/>
+                        }
+                    </Route>
+                    <Route path={`/profile`}>
+                        {this.state.loggedIn
+                            ? <ProfilePage 
+                                username={this.state.username}/>
+                            : <Redirect to='/login'/>
+                        }
+                    </Route>
+                    {/* <Route path='/'>
+                        {this.state.loggedIn
+                            ? <HomePage 
+                                username={this.state.username}/>
+                            : <LoginPage 
+                                onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}
+                                loginFailed={this.state.loginFailed}/>}
                     </Route> */}
                     <Route path='/'>
-                        {this.state.loggedIn
-                        ? <HomePage 
-                            username={this.state.username}/>
-                        : <LoginPage 
-                            onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}
-                            loginFailed={this.state.loginFailed}/>}
+                        <HomePage
+                            username={this.state.username}
+                            loggedIn={this.state.loggedIn}/>
                     </Route>
                 </Switch>
             </div>

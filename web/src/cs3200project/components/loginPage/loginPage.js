@@ -29,6 +29,7 @@ export default class LoginPage extends React.Component {
                     <TextField
                         variant="outlined"
                         label="Password"
+                        type="password"
                         className="loginField"
                         onChange={e => this.setState({ password: e.target.value })}/>
 
