@@ -1,7 +1,7 @@
 DELIMITER //
 CREATE FUNCTION calculate_bmr
 (
-	age INT,
+    age INT,
     height INT,
     weight INT,
     sex CHAR
@@ -14,7 +14,7 @@ BEGIN
     
     SET bmr = bmr + 
     CASE
-		WHEN sex = 'M' THEN 5
+    	WHEN sex = 'M' THEN 5
         WHEN sex = 'F' THEN -161
 	END;
     
