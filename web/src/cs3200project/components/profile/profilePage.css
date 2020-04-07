@@ -1,0 +1,52 @@
+#profilePage {
+    display: flex;
+    flex-direction: column;
+    background-image: url("/profilepage_cover.jpeg");
+    width: 100%;
+    height: 100vh;
+    opacity: 70%;
+}
+
+#profilePage .paper {
+    width: 50%;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+#profilePage .MuiTypography-root {
+    margin: 10px;
+}
+
+#profilePage .profileField {
+    width: 50%;
+    align-self: center;
+}
+
+#profilePage .profileText {
+    margin-top: 20px;
+    align-self: center;
+}
+
+#profilePage #profileDob {
+    display: flex;
+    justify-content: center;
+}
+
+#profilePage .profileDobForm {
+    width: 15%;
+    margin: 10px;
+}
+
+#profilePage .profileField-small {
+    width: 15%;
+    align-self: center;
+    margin: 10px;
+}
+
+#profilePage #updateButton {
+    margin: 10px;
+    margin-top: 20px;
+    align-self: center;
+    width: 20%;
+}

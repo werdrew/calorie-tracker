@@ -10,46 +10,77 @@ class UserDao {
             database: process.env.DB_DATABASE
         });
     }
-    
-    async login(username, password, res) {
-        const sql = `SELECT username, password FROM user WHERE username = ?`;
-        this.connection.query(sql, [username], (error, results, fields) => {
-            if (error) res.send({ success: false, message: `Login error: Error while querying user for password!` });
-            else {
-                const storedPassword = results[0] && results[0].password;
-                res.send({ success: password === storedPassword });
-            }
+
+    async getUser(username) {
+        const sql = `SELECT * FROM user WHERE username = ?`;
+        return new Promise((resolve) => {
+            this.connection.query(sql, [username], (error, results, fields) => {
+                if (error) resolve({ success: false, err: `Error while getting user! ${error.message}`});
+                else {
+                    resolve({ success: true, results: results[0] });
+                }
+            });
         });
     }
 
-    async register(username, password, sex, dob, height, weight, res) {
-        console.log(username, password, sex, dob, height, weight);
+    async updateUser(user) {
+        const { sex, dob, height, weight, username } = user;
+        const sql = `UPDATE user 
+SET sex = ?, dob = ?, height = ?, weight = ?
+WHERE username = ?`;
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, [sex, dob, height, weight, username], (error, results, fields) => {
+                if (error) resolve({ success: false, err: `Error while updating user! ${error.message}`});
+                else {
+                    console.log(results);
+                    resolve({ success: true });
+                }
+            });
+        });
+    }
+    
+    async login(username, password) {
+        const sql = `SELECT username, password FROM user WHERE username = ?`;
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, [username], (error, results, fields) => {
+                if (error) resolve({ success: false, err: `Login error: Error while querying user for password!` });
+                else {
+                    const storedPassword = results[0] && results[0].password;
+                    resolve({ success: password === storedPassword });
+                }
+            });
+        });
+    }
+
+    async register(username, password, sex, dob, height, weight) {
         const checkUsername = `SELECT username FROM user WHERE username = ?`;
-        this.connection.query(checkUsername, [username], (error, results, fields) => {
-            if (error) {
-                res.send({ success: false, message: `Registration error: Error while checking username! ${error}` });
-            }
-            else if (results.length > 0) {
-                res.send({ success: false, message: `Regstration error: Username already exists!`});
-            }
-            else {
-                const createUser = `INSERT INTO user SET username = ?, password = ?, sex = ?, dob = ?, height = ?, weight = ?`;
-                this.connection.query(createUser, [
-                    username,
-                    password,
-                    sex,
-                    dob,
-                    height,
-                    weight
-                 ], (error, results, fields) => {
-                    if (error) {
-                        res.send({ success: false, message: `Registration error: Error while creating user! ${error}` });
-                    }
-                    else {
-                        res.send({ success: true });
-                    }
-                });
-            }
+        return new Promise((resolve, reject) => {
+            this.connection.query(checkUsername, [username], (error, results, fields) => {
+                if (error) {
+                    resolve({ success: false, err: `Registration error: Error while checking username! ${error}` });
+                }
+                else if (results.length > 0) {
+                    resolve({ success: false, err: `Regstration error: Username already exists!`});
+                }
+                else {
+                    const createUser = `INSERT INTO user SET username = ?, password = ?, sex = ?, dob = ?, height = ?, weight = ?`;
+                    this.connection.query(createUser, [
+                        username,
+                        password,
+                        sex,
+                        dob,
+                        height,
+                        weight
+                     ], (error, results, fields) => {
+                        if (error) {
+                            resolve({ success: false, err: `Registration error: Error while creating user! ${error}` });
+                        }
+                        else {
+                            resolve({ success: true });
+                        }
+                    });
+                }
+            });
         });
     }
 }
