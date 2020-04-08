@@ -38,8 +38,7 @@ if __name__ == '__main__':
         rows = soup.find_all('tr', attrs={'class': regex})
         link_arr = link.split('/')
         food_type = link_arr[len(link_arr) - 1]
-        with open(f'./data/{food_type}.sql', '+w') as f:
-            _debug(f'Writing {food_type} to file')
+        with open(f'./data/insert_food.sql', 'a+') as f:
             for row in rows:
                 cells = row.find_all('td')
                 name = cells[0].a.getText()

@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     table = soup.find('table', attrs={ 'border': 1, 'bordercolor': '#0000FF' })
     rows = table.find_all('tr')[1:]
-    with open('./data/default_exercise_inserts.sql', '+w') as f:
+    with open('./data/insert_exercise.sql', '+w') as f:
         for row in rows:
             cells = row.find_all('td')
             exercise_info = cells[0].font.getText().strip()
