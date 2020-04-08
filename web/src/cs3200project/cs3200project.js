@@ -6,6 +6,8 @@ import RegisterPage from './components/loginPage/registerPage';
 import UserService from './service/auth/UserService';
 import HomePage from './components/home/homePage';
 import ProfilePage from './components/profile/profilePage'
+import NutritionPage from './components/nutrition/nutritionPage';
+import ActivityPage from './components/activity/activityPage';
 import './cs3200project.css';
 
 export default class CS3200Project extends React.Component {
@@ -114,14 +116,20 @@ export default class CS3200Project extends React.Component {
                             : <Redirect to='/login'/>
                         }
                     </Route>
-                    {/* <Route path='/'>
-                        {this.state.loggedIn
-                            ? <HomePage 
+                    <Route path={'/nutrition'}>
+                    {this.state.loggedIn
+                            ? <NutritionPage 
                                 username={this.state.username}/>
-                            : <LoginPage 
-                                onSubmitLoginButton={this.onSubmitLoginButton.bind(this)}
-                                loginFailed={this.state.loginFailed}/>}
-                    </Route> */}
+                            : <Redirect to='/login'/>
+                        }
+                    </Route>
+                    <Route path={'/activity'}>
+                    {this.state.loggedIn
+                            ? <ActivityPage 
+                                username={this.state.username}/>
+                            : <Redirect to='/login'/>
+                        }
+                    </Route>
                     <Route path='/'>
                         <HomePage
                             username={this.state.username}

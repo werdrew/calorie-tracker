@@ -6,6 +6,7 @@ import {
     Paper, Typography, TextField,
     FormLabel, RadioGroup, FormControlLabel
 } from '@material-ui/core';
+import DateSelector from '../date/dateSelector';
 import UserService from '../../service/auth/UserService';
 
 import "./profilePage.css";
@@ -17,7 +18,6 @@ export default class ProfilePage extends React.Component {
             profileLoadFailed: false
         }
         this.userService = new UserService();
-        this.today = new Date();
     }
 
     async componentWillMount() {
@@ -62,7 +62,7 @@ export default class ProfilePage extends React.Component {
             <div id="profilePage">
                 <Paper className="paper centerHorizontally" elevation={3}>
                     <Typography variant="h3">
-                        {this.props.username}'s Profile ({this.state.age} years old)
+                        {this.props.username}'s Profile
                     </Typography>
 
                     <FormLabel className="profileText">Sex</FormLabel>
@@ -83,50 +83,17 @@ export default class ProfilePage extends React.Component {
                         />
                     </RadioGroup>
 
-                    <FormLabel class="profileText">Date of Birth</FormLabel>
-                    <Container id="profileDob">
-                        <FormControl className="profileField profileDobForm" variant="outlined">
-                            <InputLabel id="monthInputLabel">Month</InputLabel>
-                                <Select
-                                    id="monthDropdown"
-                                    value={parseInt(this.state.month)}
-                                    onChange={e => this.setState({ month: e.target.value })}
-                                    label="Month"
-                                >
-                                    {[...Array(12).keys()].map(index => {
-                                        return <MenuItem value={index + 1}>{index + 1}</MenuItem>
-                                    })}
-                                </Select>
-                        </FormControl>
-
-                        <FormControl className="profileField profileDobForm" variant="outlined">
-                            <InputLabel id="dayInputLabel">Day</InputLabel>
-                                <Select
-                                labelId="dayDropdown"
-                                value={parseInt(this.state.day)}
-                                onChange={e => this.setState({ day: e.target.value })}
-                                label="Day"
-                                >
-                                {[...Array(31).keys()].map(index => {
-                                    return <MenuItem value={index + 1}>{index + 1}</MenuItem>
-                                })}
-                            </Select>
-                        </FormControl>
-
-                        <FormControl className="profileField profileDobForm" variant="outlined">
-                            <InputLabel id="yearInputLabel">Year</InputLabel>
-                                <Select
-                                labelId="yearDropdown"
-                                value={parseInt(this.state.year)}
-                                onChange={e => this.setState({ year: e.target.value })}
-                                label="Year"
-                                >
-                                {[...Array(this.today.getYear() + 1).keys()].map(index => {
-                                    return <MenuItem value={index + 1900}>{index + 1900}</MenuItem>
-                                })}
-                            </Select>
-                        </FormControl>
-                    </Container>
+                    <DateSelector
+                        title="Date of Birth"
+                        onDayChange={day => this.setState({ day })}
+                        onMonthChange={month => this.setState({ month })}
+                        onYearChange={year => this.setState({ year })}
+                        initialValue={{
+                            day: parseInt(this.state.day),
+                            month: parseInt(this.state.month),
+                            year: parseInt(this.state.year)
+                        }}
+                    />
 
                     <FormLabel className="profileText">Height</FormLabel>
                     <TextField 

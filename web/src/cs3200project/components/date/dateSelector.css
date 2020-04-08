@@ -1,0 +1,18 @@
+#dateSelector {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#dateSelector #dateSelectorTitle {
+    align-self: center;
+}
+
+#dateSelector #dateSelectorForms {
+    align-self: center;
+    margin: 10px;
+}
+
+#dateSelector .dateSelectorFormControl {
+    margin: 10px;
+}
