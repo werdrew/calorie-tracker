@@ -5,11 +5,14 @@ export default class FoodService {
         this.BASE_URL = `http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
     }
 
-    async createFood(username) {
-
+    async createFood(food) {
+        const response = await axios.post(this.BASE_URL + '/food', food)
+            .then(res => { return res; })
+            .catch(e => console.log(e));
+        return response.data;
     }
 
-    async updateFood(user) {
+    async updateFood() {
 
     }
 

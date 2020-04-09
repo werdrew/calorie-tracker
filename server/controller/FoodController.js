@@ -6,6 +6,17 @@ class FoodController {
         Server.get('/food/type', this.getAllFoodTypes);
         Server.get('/food/type/:type', this.getAllFoodItemsByType);
         Server.get('/food/name/:name', this.getFoodInfoByName);
+        Server.post('/food', this.createFood);
+    }
+
+    async createFood(req, res) {
+        const food = req.body;
+        try {
+            const response = await FoodService.createFood(food);
+            res.send(response);
+        } catch(e) {
+            console.log(e);
+        }
     }
 
     async getAllFoodTypes(req, res) {

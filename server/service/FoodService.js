@@ -1,6 +1,14 @@
 const FoodDao = require('../dao/FoodDao');
 
 class FoodService {
+    async createFood(food) {
+        try {
+            return await FoodDao.createFood(food);
+        } catch(e) {
+            throw e;
+        }
+    }
+
     async getAllFoodTypes() {
         try {
             return await FoodDao.getAllFoodTypes();

@@ -3,7 +3,9 @@ import { Button, Paper, Typography } from '@material-ui/core';
 import DateSelector from '../date/dateSelector';
 import Log from '../table/log';
 import EntriesDialog from '../dialog/entriesDialog';
+import MealsDialog from '../dialog/mealsDialog';
 import FoodLogService from '../../service/nutrition/FoodLogService';
+import FoodService from '../../service/nutrition/FoodService';
 import "./nutritionPage.css";
 
 export default class NutritionPage extends React.Component {
@@ -19,6 +21,7 @@ export default class NutritionPage extends React.Component {
             rows: []
         };
         this.foodLogService = new FoodLogService();
+        this.foodService = new FoodService();
     }
 
     async componentWillMount() {
@@ -72,6 +75,18 @@ export default class NutritionPage extends React.Component {
         await this.foodLogService.deleteFoodLogEntry(foodLogEntry);
     }
 
+    async onCreateMeal(food) {
+        await this.foodService.createFood(food);
+    }
+
+    async onEditMeal() {
+
+    }
+
+    async onDeleteMeal() {
+
+    }
+
     render() {
         return (
             <div id="nutritionPage">
@@ -113,13 +128,15 @@ export default class NutritionPage extends React.Component {
                     </div>
                 </Paper>
 
-                {/* {this.state.openMealsDialog &&
-                    <FoodDialog
+                {this.state.openMealsDialog &&
+                    <MealsDialog
                         title={`Your Meals`}
                         open={this.state.openMealsDialog}
                         onClose={() => this.setState({ openMealsDialog: false })}
-                        onAddEntry={this.onAddEntry.bind(this)}/>
-                } */}
+                        onCreateMeal={this.onCreateMeal.bind(this)}
+                        onEditMeal={this.onEditMeal.bind(this)}
+                        onDeleteMeal={this.onDeleteMeal.bind(this)}/>
+                }
 
                 {this.state.openEntriesDialog &&
                     <EntriesDialog

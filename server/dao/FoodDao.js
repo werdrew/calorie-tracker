@@ -11,6 +11,26 @@ class FoodDao {
         });
     }
 
+    async createFood(food) {
+        const sql = `
+INSERT INTO FOOD (name, type, grams_per_serving, calories_per_100g)
+VALUES (?, ?, ?, ?)
+`;
+        return new Promise((resolve, reject) => {
+            this.connection.query(sql, [
+                food.name,
+                food.type,
+                food.gramsPerServing,
+                food.caloriesPer100G
+            ], (error, results, fields) => {
+                if (error) reject(error)
+                else {
+                    resolve({ success: true });
+                }
+            })
+        });
+    }
+
     async getAllFoodTypes() {
         const sql = `SELECT DISTINCT type FROM food;`;
         return new Promise((resolve, reject) => {
