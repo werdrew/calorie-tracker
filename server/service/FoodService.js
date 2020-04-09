@@ -1,9 +1,19 @@
 const FoodDao = require('../dao/FoodDao');
+const FoodTypeDao = require('../dao/FoodTypeDao');
 const UserFoodDao = require ('../dao/UserFoodDao.js')
 
 class FoodService {
     async createMeal(uid, meal) {
         try {
+            const type = meal.type;
+            const row = await FoodTypeDao.getTypeIdByType(type);
+            let result;
+            if (!row.id) {
+                result = await FoodTypeDao.createFoodType(type);
+                meal.type = result.id;
+            } else {
+                meal.type = row.id;
+            }
             const newMeal = await FoodDao.createMeal(meal);
             const fid = newMeal.id;
             return await UserFoodDao.mapUserToMeal(uid, fid);
@@ -14,6 +24,17 @@ class FoodService {
 
     async editMeal(uid, mid, meal) {
         try {
+            const type = meal.type;
+            const row = await FoodTypeDao.getTypeIdByType(type);
+            let result;
+            console.log(row);
+            if (!row.id) {
+                result = await FoodTypeDao.createFoodType(type);
+                console.log(result);
+                meal.type = result.id;
+            } else {
+                meal.type = row.id;
+            }
             return await FoodDao.editMeal(uid, mid, meal);
         } catch(e) {
             throw e;
@@ -45,7 +66,7 @@ class FoodService {
 
     async getAllFoodTypes() {
         try {
-            return await FoodDao.getAllFoodTypes();
+            return await FoodTypeDao.getAllFoodTypes();
         } catch(e) {
             throw e;
         }
@@ -53,7 +74,8 @@ class FoodService {
 
     async getAllFoodItemsByType(type) {
         try {
-            return await FoodDao.getAllFoodItemsByType(type);
+            const data = await FoodTypeDao.getTypeIdByType(type);
+            return await FoodDao.getAllFoodItemsByType(data.id, type);
         } catch(e) {
             throw e;
         }

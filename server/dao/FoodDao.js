@@ -13,7 +13,7 @@ class FoodDao {
 
     async createMeal(food) {
         const sql = `
-INSERT INTO FOOD (name, type, grams_per_serving, calories_per_100g)
+INSERT INTO FOOD (name, type_id, grams_per_serving, calories_per_100g)
 VALUES (?, ?, ?, ?)
 `;
         return new Promise((resolve, reject) => {
@@ -32,10 +32,9 @@ VALUES (?, ?, ?, ?)
     }
 
     async editMeal(uid, mid, meal) {
-        console.log(meal);
         const sql = `
 UPDATE food
-SET name = ?, type = ?, grams_per_serving = ?, calories_per_100g = ?
+SET name = ?, type_id = ?, grams_per_serving = ?, calories_per_100g = ?
 WHERE id = ?;
 `;
         return new Promise((resolve, reject) => {
@@ -70,20 +69,10 @@ DELETE FROM food WHERE id = ?
         });
     }
 
-    async getAllFoodTypes() {
-        const sql = `SELECT DISTINCT type FROM food;`;
-        return new Promise((resolve, reject) => {
-            this.connection.query(sql, (error, results, fields) => {
-                if (error) reject(error)
-                else {
-                    resolve({ types: results.map(result => result.type)});
-                }
-            })
-        });
-    }
-
     async getAllFoodItemsByType(type) {
-        const sql = `SELECT name, type, grams_per_serving, calories_per_100g FROM food WHERE type = ?`;
+        const sql = `
+SELECT name, "${type}" AS type, grams_per_serving, calories_per_100g FROM food WHERE type_id = ?
+`;
         return new Promise((resolve, reject) => {
             this.connection.query(sql, [type], (error, results, fields) => {
                 if (error) reject(error)
@@ -107,9 +96,8 @@ DELETE FROM food WHERE id = ?
     }
 
     async getAllMealsCreatedByUser(fids) {
-        console.log(fids);
         const sql = `
-SELECT id, name, type, grams_per_serving, calories_per_100g 
+SELECT id, name, type_id, grams_per_serving, calories_per_100g 
 FROM food
 WHERE id IN (?);
 `;
