@@ -12,7 +12,7 @@ DROP TABLE cs3200_project.exercise;
 -- This table defines types of exercises.
 CREATE TABLE IF NOT EXISTS cs3200_project.exercise_type (
 	id INT NOT NULL AUTO_INCREMENT,
-    type VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY(id)
 );
 

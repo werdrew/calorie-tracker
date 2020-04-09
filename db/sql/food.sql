@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS cs3200_project.food (
 -- This table defines types of foods.
 CREATE TABLE IF NOT EXISTS cs3200_project.food_type (
 	id INT NOT NULL AUTO_INCREMENT,
-	type VARCHAR(255) NOT NULL,
+	type VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id)
 );
 DROP TABLE food_type;

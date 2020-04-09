@@ -4,7 +4,9 @@ import urllib.request
 import re
 
 SCHEMA = 'cs3200_project'
-TABLE  = 'exercise'
+EXERCISE_TABLE  = 'exercise'
+EXERCISE_TYPE_TABLE = 'exercise_type'
+CALORIES_BURNED_TABLE = 'calories_burned'
 
 def _debug(msg):
     print(msg, flush=True)
@@ -16,23 +18,30 @@ def _parse_page(url):
     return soup
 
 def _compile_to_sql(exercise_name, exercise_type, cals_burned_at):
-    exercise_sql = f'INSERT INTO {SCHEMA}.{TABLE} (name, type) ' \
-f'VALUES ("{exercise_name}", "{exercise_type}");'
+    exercise_type_sql = f'INSERT IGNORE INTO {SCHEMA}.{EXERCISE_TYPE_TABLE} (type)' \
+f' VALUES ("{exercise_type}");'
+
+    exercise_sql = f'INSERT INTO {SCHEMA}.{EXERCISE_TABLE} (type_id, name) ' \
+f'SELECT et.id, "{exercise_name}"' \
+f' FROM {EXERCISE_TYPE_TABLE} et' \
+f' WHERE type = "{exercise_type}";'
+
     at_130 = cals_burned_at['130']
     at_155 = cals_burned_at['155']
     at_180 = cals_burned_at['180']
     at_205 = cals_burned_at['205']
-    cals_burned_at_sql = f'INSERT INTO {SCHEMA}.calories_burned ' \
+
+    cals_burned_at_sql = f'INSERT INTO {SCHEMA}.{CALORIES_BURNED_TABLE} ' \
 'SELECT ' \
-f'{SCHEMA}.{TABLE}.id, ' \
+f'e.id, ' \
 f'{at_130}, ' \
 f'{at_155}, ' \
 f'{at_180}, ' \
 f'{at_205} ' \
-f' FROM {SCHEMA}.{TABLE} ' \
-f'WHERE {SCHEMA}.{TABLE}.name = "{exercise_name}" ' \
-f'AND {SCHEMA}.{TABLE}.type = "{exercise_type}"; '
-    return exercise_sql + '\n' + cals_burned_at_sql
+f' FROM {SCHEMA}.{EXERCISE_TABLE} e ' \
+f' WHERE e.name = "{exercise_name}"' \
+f' AND e.type_id = (SELECT id FROM {EXERCISE_TYPE_TABLE} WHERE type = "{exercise_type}");'
+    return exercise_type_sql + '\n' + exercise_sql + '\n' + cals_burned_at_sql
 
 
 if __name__ == '__main__':
@@ -48,8 +57,8 @@ if __name__ == '__main__':
             if ', ' in exercise_info:
                 on = ' ' if '(' in exercise_info else ', '
                 exercise_info = exercise_info.split(on)
-                exercise_name = ' '.join(exercise_info[0].split()).strip()
-                exercise_type = ' '.join(exercise_info[1:]).strip()
+                exercise_type = ' '.join(exercise_info[0].split()).strip()
+                exercise_name = ' '.join(exercise_info[1:]).strip()
             else:
                 exercise_name = ' '.join(exercise_info.split()).strip()
                 exercise_type = 'Other'

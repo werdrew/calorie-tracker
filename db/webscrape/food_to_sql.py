@@ -4,7 +4,8 @@ import urllib.request
 import re
 
 SCHEMA = 'cs3200_project'
-TABLE  = 'food'
+FOOD_TABLE  = 'food'
+FOOD_TYPE_TABLE = 'food_type'
 
 def _debug(msg):
     print(msg, flush=True)
@@ -16,10 +17,15 @@ def _parse_page(url):
     return soup
 
 def _compile_to_sql(name, food_type, grams_per_serving, calories_per_100g):
-    sql = f'''
-INSERT INTO {SCHEMA}.{TABLE} (name, type, grams_per_serving, calories_per_100g)
-VALUES ('{name}', '{food_type}', {grams_per_serving}, {calories_per_100g});\n'''
-    return sql
+    food_type_sql = f'INSERT IGNORE INTO {SCHEMA}.{FOOD_TYPE_TABLE} (type)' \
+f' VALUES ("{food_type}");'
+
+    food_sql = f'INSERT INTO {SCHEMA}.{FOOD_TABLE} (type_id, name, grams_per_serving, calories_per_100g)' \
+f' SELECT ft.id, "{name}", {grams_per_serving}, {calories_per_100g} ' \
+f' FROM {FOOD_TYPE_TABLE} ft' \
+f' WHERE ft.type = "{food_type}";'
+
+    return food_type_sql + '\n' + food_sql
 
 if __name__ == '__main__':
     base_url = 'https://www.calories.info/'
@@ -54,3 +60,4 @@ if __name__ == '__main__':
                 sql = _compile_to_sql(name, food_type, grams_per_serving, calories_per_100g)
 
                 f.write(sql)
+                f.write('\n')
