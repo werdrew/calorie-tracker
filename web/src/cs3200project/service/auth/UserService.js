@@ -7,7 +7,7 @@ export default class UserService {
 
     async getUser(username) {
         const response = await axios
-            .get(this.BASE_URL + `/${username}`)
+            .get(this.BASE_URL + `/user/${username}`)
             .then(res => {
                 return res;
             })
@@ -19,7 +19,7 @@ export default class UserService {
 
     async updateUser(user) {
         const response = await axios
-            .put(this.BASE_URL + `/${user.username}`, {
+            .put(this.BASE_URL + `/user/${user.username}`, {
                 user
             })
             .then(res => {
@@ -33,7 +33,7 @@ export default class UserService {
 
     async login(formData) {
         const response = await axios
-            .post(this.BASE_URL + '/login', formData)
+            .post(this.BASE_URL + '/user/login', formData)
             .then(res => {
                 return res;
             })
@@ -45,7 +45,7 @@ export default class UserService {
 
     async register(formData) {
         const response = await axios
-            .post(this.BASE_URL + '/register', formData)
+            .post(this.BASE_URL + '/user/register', formData)
             .then(res => {
                 return res;
             })

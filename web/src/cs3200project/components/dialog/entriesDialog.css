@@ -1,0 +1,56 @@
+.formDialog {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.formDialog .MuiDialogTitle-root {
+    width: 75vh;
+}
+
+.formDialog .h6-header {
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+.formDialog .dialogRow {
+    display: flex;
+    justify-content: center;
+    margin: 7px;
+}
+
+.formDialog .dialogRow {
+    display: flex;
+    justify-content: center;
+    margin: 7px;
+    flex-direction: column;
+}
+
+.formDialog .buttonRow {
+    margin-top: 20px;
+    align-self: center;
+}
+
+.formDialog .foodInfo {
+    flex-direction: column;
+}
+
+.formDialog .foodInfo .text {
+    text-align: center;
+}
+
+.formDialog #addMode {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-right: 20px;
+    justify-items: center;
+}
+
+.formDialog #editMode {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-right: 20px;
+    justify-items: center;
+}

@@ -66,7 +66,7 @@ export default class ProfilePage extends React.Component {
                     </Typography>
 
                     <FormLabel className="profileText">Sex</FormLabel>
-                    <RadioGroup className="profileField" value={this.state.sex || "M"}>
+                    <RadioGroup className="radioGroup profileField" value={this.state.sex || "M"}>
                         <FormControlLabel
                             control={<Radio color="primary" />}
                             label="Male"

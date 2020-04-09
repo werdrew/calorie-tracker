@@ -16,6 +16,7 @@ export default class CS3200Project extends React.Component {
         this.state = {
             loggedIn: false,
             username: undefined,
+            id: undefined,
             loginFailed: false,
             registrationFailed: false
         };
@@ -27,9 +28,11 @@ export default class CS3200Project extends React.Component {
             const data = await this.userService.login(formData);
             const loggedIn = data.success;
             if (loggedIn) {
+                console.log(data);
                 this.setState({
                     loggedIn: true,
-                    username: formData.username
+                    username: formData.username,
+                    id: data.id
                 });
             }
             else {
@@ -49,7 +52,7 @@ export default class CS3200Project extends React.Component {
             if (registered) {
                 this.setState({
                     loggedIn: true,
-                    username: formData.username
+                    username: formData.username.toLowerCase()
                 });
             }
             else {
@@ -105,34 +108,39 @@ export default class CS3200Project extends React.Component {
                         {this.state.loggedIn
                             ? <HomePage 
                                 username={this.state.username}
-                                loggedIn={this.state.loggedIn}/>
+                                loggedIn={this.state.loggedIn}
+                                id={this.state.id}/>
                             : <Redirect to='/login'/>
                         }
                     </Route>
                     <Route path={`/profile`}>
                         {this.state.loggedIn
                             ? <ProfilePage 
-                                username={this.state.username}/>
+                                username={this.state.username}
+                                id={this.state.id}/>
                             : <Redirect to='/login'/>
                         }
                     </Route>
                     <Route path={'/nutrition'}>
                     {this.state.loggedIn
                             ? <NutritionPage 
-                                username={this.state.username}/>
+                                username={this.state.username}
+                                id={this.state.id}/>
                             : <Redirect to='/login'/>
                         }
                     </Route>
                     <Route path={'/activity'}>
                     {this.state.loggedIn
                             ? <ActivityPage 
-                                username={this.state.username}/>
+                                username={this.state.username}
+                                id={this.state.id}/>
                             : <Redirect to='/login'/>
                         }
                     </Route>
                     <Route path='/'>
                         <HomePage
                             username={this.state.username}
+                            id={this.state.id}
                             loggedIn={this.state.loggedIn}/>
                     </Route>
                 </Switch>

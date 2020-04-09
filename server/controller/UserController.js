@@ -3,10 +3,10 @@ const UserService = require('../service/UserService');
 
 class UserController {
     constructor() {
-        Server.get('/:username', this.getUser);
-        Server.put('/:username', this.updateUser);
-        Server.post('/login', this.login);
-        Server.post('/register', this.register);
+        Server.get('/user/:username', this.getUser);
+        Server.put('/user/:username', this.updateUser);
+        Server.post('/user/login', this.login);
+        Server.post('/user/register', this.register);
     }
 
     async getUser(req, res) {

@@ -37,7 +37,6 @@ export default class DateSelector extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <div id='dateSelector'>
                 <FormLabel id='dateSelectorTitle'>{this.props.title}</FormLabel>
@@ -46,7 +45,7 @@ export default class DateSelector extends React.Component {
                         <InputLabel className="dateSelectorInputLabel">Month</InputLabel>
                         <Select
                             id="monthDropdown"
-                            value={this.props.initialValue.month || this.state.month}
+                            value={this.props.initialValue ? this.props.initialValue.month : this.state.month}
                             onChange={e => this.onMonthChange(e)}
                             label="Month"
                             >
@@ -60,7 +59,7 @@ export default class DateSelector extends React.Component {
                         <InputLabel className="dateSelectorInputLabel">Day</InputLabel>
                         <Select
                             labelId="dayDropdown"
-                            value={this.props.initialValue.day || this.state.day}
+                            value={this.props.initialValue ? this.props.initialValue.day : this.state.day}
                             onChange={e => this.onDayChange(e)}
                             label="Day"
                             >
@@ -74,7 +73,7 @@ export default class DateSelector extends React.Component {
                         <InputLabel className="dateSelectorInputLabel">Year</InputLabel>
                         <Select
                             labelId="yearDropdown"
-                            value={this.props.initialValue.year || this.state.year}
+                            value={this.props.initialValue ? this.props.initialValue.year : this.state.year}
                             onChange={e => this.onYearChange(e)}
                             label="Year"
                             >

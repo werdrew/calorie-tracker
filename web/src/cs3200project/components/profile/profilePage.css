@@ -18,6 +18,16 @@
     margin: 10px;
 }
 
+/* #profilePage .MuiFormControlLabel-root {
+    align-self: center;
+} */
+
+#profilePage .radioGroup {
+    margin: 5px;
+    flex-direction: row;
+    justify-content: center;
+}
+
 #profilePage .profileField {
     width: 50%;
     align-self: center;
