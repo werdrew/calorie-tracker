@@ -3,7 +3,7 @@ const FoodLogService = require('../service/FoodLogService');
 
 class FoodLogController {
     constructor() {
-        Server.post('/food/log', this.createFoodLogEntry);
+        Server.post('/food/log/:uid', this.createFoodLogEntry);
         Server.put('/food/log/:uid/:date/:fid', this.editFoodLogEntry);
         Server.delete('/food/log/:uid/:date/:fid', this.deleteFoodLogEntry);
         Server.get('/food/log/:id/:date', this.getLogsForDate);
@@ -12,6 +12,7 @@ class FoodLogController {
 
     async createFoodLogEntry(req, res) {
         const foodLogEntry = req.body;
+        console.log(foodLogEntry);
         try {
             const response = await FoodLogService.createFoodLogEntry(foodLogEntry);
             res.send(response);

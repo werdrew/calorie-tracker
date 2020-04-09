@@ -27,7 +27,7 @@ export default class Log extends React.Component {
                     {this.props.headers.map(header => {
                         return <TableCell>
                             {header == 'serving_size' 
-                                ? row['num_servings'] || row['num_grams'] 
+                                ? row['num_servings'] || row['num_grams'] + "g"
                                 : row[header]}
                         </TableCell>
                     })}

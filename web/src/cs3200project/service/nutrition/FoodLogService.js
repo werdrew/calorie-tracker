@@ -5,9 +5,9 @@ export default class FoodLogService {
         this.BASE_URL = `http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
     }
 
-    async createFoodLogEntry(foodLogEntry) {
+    async createFoodLogEntry(uid, foodLogEntry) {
         const response = await axios
-            .post(this.BASE_URL + '/food/log', foodLogEntry)
+            .post(this.BASE_URL + `/food/log/${uid}`, foodLogEntry)
             .then(res => { return res; })
             .catch(e => console.log(e));
         return response.data;

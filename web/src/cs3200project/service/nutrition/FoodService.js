@@ -5,19 +5,39 @@ export default class FoodService {
         this.BASE_URL = `http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
     }
 
-    async createFood(food) {
-        const response = await axios.post(this.BASE_URL + '/food', food)
+    async createMeal(id, meal) {
+        const response = await axios
+            .post(this.BASE_URL + `/food/${id}`, {
+                meal
+            })
             .then(res => { return res; })
             .catch(e => console.log(e));
         return response.data;
     }
 
-    async updateFood() {
-
+    async editMeal(id, meal) {
+        const response = await axios
+            .put(this.BASE_URL + `/food/${id}/${meal.id}`, {
+                meal
+            })
+            .then(res => { return res; })
+            .catch(e => console.log(e));
+        return response.data;
     }
 
-    async deleteFood() {
+    async deleteMeal(id, mealId) {
+        const response = await axios
+            .delete(this.BASE_URL + `/food/${id}/${mealId}`)
+            .then(res => { return res; })
+            .catch(e => console.log(e));
+        return response.data;
+    }
 
+    async getAllMealsCreatedByUser(uid) {
+        const response = await axios.get(this.BASE_URL + `/food/${uid}`)
+            .then(res => { return res; })
+            .catch(e => console.log(e));
+        return response.data;
     }
 
     async getFoodInfoByName(name) {
@@ -43,12 +63,4 @@ export default class FoodService {
             .catch(e => console.log(e));
         return response.data;
     }
-
-    // async createFoodEntry(foodEntry) {
-    //     const response = await axios
-    //         .post(this.BASE_URL + '/food', foodEntry)
-    //         .then(res => { return res; })
-    //         .catch(e => console.log(e));
-    //     return response.data;
-    // }
 }

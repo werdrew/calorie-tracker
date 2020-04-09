@@ -28,14 +28,12 @@ export default class NutritionPage extends React.Component {
         const date = `${this.state.month}-${this.state.day}-${this.state.year}`;
         const rowData = await this.foodLogService.getLogsForDate(this.props.id, date);
         const calData = await this.foodLogService.getTotalCaloriesForDate(this.props.id, date);
-        console.log(rowData);
         this.setState({ rows: rowData.rows, calories: calData.calories });
     }
 
     async componentDidUpdate() {
         const date = `${this.state.month}-${this.state.day}-${this.state.year}`;
         const rowData = await this.foodLogService.getLogsForDate(this.props.id, date);
-        console.log(rowData);
         const calData = await this.foodLogService.getTotalCaloriesForDate(this.props.id, date);
         if ((this.state.rows.length != rowData.rows.length) || this.state.justUpdated) {
             this.setState({ rows: rowData.rows, justUpdated: false });
@@ -53,38 +51,66 @@ export default class NutritionPage extends React.Component {
         return this.state.rows;
     }
 
-    async onAddEntry(dialogState) {
-        const foodLogEntry = {
-            user_id: this.props.id,
-            food_id: dialogState.foodInfo.id,
-            date: `${this.state.month}-${this.state.day}-${this.state.year}`,
-            num_servings: dialogState.enterServings ? parseInt(dialogState.servingSize) : null,
-            num_grams: dialogState.enterServings ? null : parseInt(dialogState.servingSize),
+    async onCreateEntry(foodLogEntry) {
+        foodLogEntry.user_id = this.props.id;
+        foodLogEntry.date = `${this.state.month}-${this.state.day}-${this.state.year}`
+        try {
+            await this.foodLogService.createFoodLogEntry(this.props.id, foodLogEntry);
+            this.setState({ createEntrySucceeded: true, justUpdated: true });
+        } catch (e) {
+            console.log(e);
+            this.setState({ createEntrySucceeded: false });
         }
-        await this.foodLogService.createFoodLogEntry(foodLogEntry);
     }
 
     async onEditEntry(foodLogEntry) {
-        const data = await this.foodLogService.editFoodLogEntry(foodLogEntry);
-        if (data.success) {
-            this.setState({ justUpdated: true });
+        try {
+            await this.foodLogService.editFoodLogEntry(foodLogEntry);
+            this.setState({ editEntrySucceeded: true, justUpdated: true });
+        } catch (e) {
+            console.log(e);
+            this.setState({ editEntrySucceeded: false });
         }
     }
 
     async onDeleteEntry(foodLogEntry) {
-        await this.foodLogService.deleteFoodLogEntry(foodLogEntry);
+        try {
+            await this.foodLogService.deleteFoodLogEntry(foodLogEntry);
+            this.setState({ deleteEntrySucceeded: true, justUpdated: true })
+        } catch (e) {
+            console.log(e);
+            this.setState({ deleteEntrySucceeded: false })
+        }
     }
 
-    async onCreateMeal(food) {
-        await this.foodService.createFood(food);
+    async onCreateMeal(meal) {
+        try {
+            await this.foodService.createMeal(this.props.id, meal);
+            this.setState({ createMealSucceeded: true, justUpdated: true });
+        } catch (e) {
+            console.log(e);
+            this.setState({ createMealSucceeded: false });
+        }
     }
 
-    async onEditMeal() {
-
+    async onEditMeal(meal) {
+        try {
+            await this.foodService.editMeal(this.props.id, meal);
+            this.setState({ editMealSucceeded: true, justUpdated: true })
+        } catch (e) {
+            console.log(e);
+            this.setState({ editMealSucceeded: false })
+        }
     }
 
-    async onDeleteMeal() {
-
+    async onDeleteMeal(mealId) {
+        try {
+            await this.foodService.deleteMeal(this.props.id, mealId);
+            this.setState({ deleteMealSucceeded: true, justUpdated: true });
+        } catch (e) {
+            console.log(e);
+            this.setState({ deleteMealSucceeded: false })
+        }
     }
 
     render() {
@@ -135,7 +161,8 @@ export default class NutritionPage extends React.Component {
                         onClose={() => this.setState({ openMealsDialog: false })}
                         onCreateMeal={this.onCreateMeal.bind(this)}
                         onEditMeal={this.onEditMeal.bind(this)}
-                        onDeleteMeal={this.onDeleteMeal.bind(this)}/>
+                        onDeleteMeal={this.onDeleteMeal.bind(this)}
+                        {...this.props}/>
                 }
 
                 {this.state.openEntriesDialog &&
@@ -143,10 +170,11 @@ export default class NutritionPage extends React.Component {
                         title={`Add/Edit Entries`}
                         open={this.state.openEntriesDialog}
                         onClose={() => this.setState({ openEntriesDialog: false })}
-                        onAddEntry={this.onAddEntry.bind(this)}
+                        onCreateEntry={this.onCreateEntry.bind(this)}
                         onEditEntry={this.onEditEntry.bind(this)}
                         onDeleteEntry={this.onDeleteEntry.bind(this)}
-                        entries={this.state.rows}/>
+                        entries={this.state.rows}
+                        {...this.props}/>
                 }
 
             </div>

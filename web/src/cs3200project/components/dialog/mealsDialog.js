@@ -9,19 +9,57 @@ export default class MealsDialog extends React.Component {
         this.state = {
             addMode: true,
             selectExistingType: true,
-            types: []
+            types: [],
+            foodItems: [],
+            userCreatedMeals: []
         }
         this.foodService = new FoodService();
     }
 
     async componentWillMount() {
         const foodTypes = await this.foodService.getAllFoodTypes();
-        this.setState({ types: foodTypes.types } );
+        const userCreatedMeals = await this.foodService.getAllMealsCreatedByUser(this.props.id);
+        this.setState({ 
+            types: foodTypes.types, 
+            userCreatedMeals, 
+            mealToEdit: userCreatedMeals[0] || undefined 
+        });
+    }
+
+    async componentDidUpdate() {
+        // const foodTypes = await this.foodService.getAllFoodTypes();
+        const userCreatedMeals = await this.foodService.getAllMealsCreatedByUser(this.props.id);
+        if (this.state.userCreatedMeals.length != userCreatedMeals.length || this.state.justUpdated) {
+            this.setState({ 
+                userCreatedMeals,
+                mealToEdit: userCreatedMeals[0] || undefined
+            });
+        }
+    }
+
+    async applyFoodType() {
+        if (!this.state.foodType) {
+            this.setState({ failedToApplyFoodType: true })
+        }
+        else {
+            const foodItems = await this.foodService.getAllFoodItemsByType(this.state.foodType);
+            this.setState({ failedToApplyFoodType: false, foodItems: foodItems.items });
+        };
+    }
+
+    async applyFoodItem() {
+        if (!this.state.foodItem) {
+            this.setState({ failedToApplyFoodItem: true })
+        }
+        else {
+            const foodInfo = await this.foodService.getFoodInfoByName(this.state.foodItem.name);
+            this.setState({ failedToApplyFoodType: false, foodInfo: foodInfo.info });
+        };
     }
 
     renderAddMode() {
         return (
-            <div className="addMode">
+            <div id="addMode">
                 <Typography className="h6-header" variant="h6">
                     {this.state.selectExistingType 
                         ? "Select an existing type:"
@@ -105,7 +143,80 @@ export default class MealsDialog extends React.Component {
 
     renderEditMode() {
         return (
-            <div className="editMode"></div>
+            <div id="editMode">
+                <div className="dialogRow">
+                    <Typography className="h6-header" variant="h6">
+                        Select which food item to edit:
+                    </Typography>
+                    <Select 
+                        value={this.state.mealToEdit || this.state.userCreatedMeals[0]}
+                        onChange={e => this.setState({ mealToEdit: e.target.value })}>
+                        {this.state.userCreatedMeals.map(meal => {
+                            return <MenuItem value={meal}>{meal.name}</MenuItem>
+                        })}
+                    </Select>
+                </div>
+                {this.state.mealToEdit &&
+                    <div className="dialogRow">
+                    <TextField 
+                        variant="outlined"
+                        label="Name"
+                        onChange={e => {
+                            const newName = e.target.value;
+                            const editedMeal = {...this.state.editedMeal};
+                            editedMeal.name = newName;
+                            this.setState({ editedMeal });
+                        }}/>
+                    <TextField 
+                        variant="outlined"
+                        label="Type"
+                        onChange={e => {
+                            const newType = e.target.value;
+                            const editedMeal = {...this.state.editedMeal};
+                            editedMeal.type = newType;
+                            this.setState({ editedMeal });
+                        }}/>
+                    <TextField 
+                        variant="outlined"
+                        label="Grams per serving"
+                        onChange={e => {
+                            const newGramsPerServing = e.target.value;
+                            const editedMeal = {...this.state.editedMeal};
+                            editedMeal.gramsPerServing = newGramsPerServing;
+                            this.setState({ editedMeal });
+                        }}/>
+                    <TextField 
+                        variant="outlined"
+                        label="Calories per 100g"
+                        onChange={e => {
+                            const newCaloriesPer100G = e.target.value;
+                            const editedMeal = {...this.state.editedMeal};
+                            editedMeal.caloriesPer100G = newCaloriesPer100G;
+                            this.setState({ editedMeal })
+                        }}/>
+                    </div>
+                }
+                <div className="buttonRow">
+                    <Button
+                        className="button"
+                        onClick={() => this.props.onEditMeal({ id: this.state.mealToEdit.id, ...this.state.editedMeal })}
+                        disabled={
+                            !this.state.editedMeal
+                            || !this.state.editedMeal.name
+                            || !this.state.editedMeal.type
+                            || !this.state.editedMeal.gramsPerServing
+                            || !this.state.editedMeal.caloriesPer100G
+                        }>
+                        Edit
+                    </Button>
+                    <Button
+                        className="button"
+                        onClick={() => this.props.onDeleteMeal(this.state.mealToEdit.id)}
+                        disabled={!this.state.mealToEdit}>
+                        Delete
+                    </Button>
+                </div>
+            </div>
         );
     }
 

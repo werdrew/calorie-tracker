@@ -1,9 +1,43 @@
 const FoodDao = require('../dao/FoodDao');
+const UserFoodDao = require ('../dao/UserFoodDao.js')
 
 class FoodService {
-    async createFood(food) {
+    async createMeal(uid, meal) {
         try {
-            return await FoodDao.createFood(food);
+            const newMeal = await FoodDao.createMeal(meal);
+            const fid = newMeal.id;
+            return await UserFoodDao.mapUserToMeal(uid, fid);
+        } catch(e) {
+            throw e;
+        }
+    }
+
+    async editMeal(uid, mid, meal) {
+        try {
+            return await FoodDao.editMeal(uid, mid, meal);
+        } catch(e) {
+            throw e;
+        }
+    }
+
+    async deleteMeal(uid, mid) {
+        try {
+            await UserFoodDao.deleteMeal(uid, mid);
+            return await FoodDao.deleteMeal(mid);
+        } catch(e) {
+            throw e;
+        }
+    }
+
+    async getAllMealsCreatedByUser(uid) {
+        try {
+            const data = await UserFoodDao.getAllMealsCreatedByUser(uid);
+            if (data.foodIds.length > 0) {
+                const rows = await FoodDao.getAllMealsCreatedByUser(data.foodIds.map(rowData => rowData['food_id']));
+                return rows.meals;
+            } else {
+                return [];
+            }
         } catch(e) {
             throw e;
         }

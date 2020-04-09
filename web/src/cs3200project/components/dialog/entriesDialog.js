@@ -53,7 +53,7 @@ export default class FoodDialog extends React.Component {
                 <Typography className="h6-header" variant="h6">Select a food type:</Typography>
                 <div className="dialogRow">
                     <Select 
-                        value={this.state.types[0]}
+                        value={this.state.selectedType || this.state.types[0]}
                         onChange={e => this.setState({ selectedType: e.target.value })}>
                             {this.state.types.map(type => {
                                 return <MenuItem value={type}>{type}</MenuItem>
@@ -69,7 +69,7 @@ export default class FoodDialog extends React.Component {
                 <Typography className="h6-header" variant="h6">Select a food item:</Typography>
                 <div className="dialogRow">
                     <Select 
-                        value={this.state.foodItems[0]}
+                        value={this.state.selectedFoodItem || this.state.foodItems[0]}
                         onChange={e => this.setState({ selectedFoodItem: e.target.value })}>
                             {this.state.foodItems.map(item => {
                                 return <MenuItem value={item.name}>{item.name}</MenuItem>
@@ -113,7 +113,11 @@ export default class FoodDialog extends React.Component {
 
                 <Button
                     className="button"
-                    onClick={() => this.props.onAddEntry(this.state)}
+                    onClick={() => this.props.onCreateEntry({
+                        food_id: this.state.foodInfo.id,
+                        num_servings: this.state.enterServings ? parseInt(this.state.servingSize) : null,
+                        num_grams: this.state.enterServings ? null: parseInt(this.state.servingSize)
+                    })}
                     disabled={!this.state.servingSize}>
                     Add Entry
                 </Button>
@@ -124,19 +128,18 @@ export default class FoodDialog extends React.Component {
     renderEditMode() {
         return (
             <div id="editMode">
-                {console.log(this.props.entries)}
                 <Typography className="h6-header" variant="h6">Select an entry to edit:</Typography>
                 <div className="dialogRow">
-                    <Select 
+                    <Select
                         onChange={e => this.setState({ entryToEdit: e.target.value })}>
                             {this.props.entries.map(entry => {
+                                console.log(entry);
                                 return <MenuItem value={entry}>{entry.name}</MenuItem>
                             })}
                     </Select>
                 </div>
                 { this.state.entryToEdit &&
                     <div className="dialogRow">
-                        {console.log(this.state.entryToEdit)}
                         <div className="dialogColumn">
                             <Typography className="h6-header" variant="h6">
                                 {this.state.editServings
