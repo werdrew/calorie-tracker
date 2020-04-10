@@ -27,10 +27,11 @@ export default class MealsDialog extends React.Component {
     }
 
     async componentDidUpdate() {
-        // const foodTypes = await this.foodService.getAllFoodTypes();
+        const foodTypes = await this.foodService.getAllFoodTypes();
         const userCreatedMeals = await this.foodService.getAllMealsCreatedByUser(this.props.id);
         if (this.state.userCreatedMeals.length != userCreatedMeals.length || this.state.justUpdated) {
             this.setState({ 
+                types: foodTypes.types, 
                 userCreatedMeals,
                 mealToEdit: userCreatedMeals[0] || undefined
             });
@@ -53,7 +54,7 @@ export default class MealsDialog extends React.Component {
         }
         else {
             const foodInfo = await this.foodService.getFoodInfoByName(this.state.foodItem.name);
-            this.setState({ failedToApplyFoodType: false, foodInfo: foodInfo.info });
+            this.setState({ failedToApplyFoodItem: false, foodInfo: foodInfo.info });
         };
     }
 
@@ -101,19 +102,12 @@ export default class MealsDialog extends React.Component {
                 }
                 {this.state.foodName &&
                     <div>
-                        <Typography className="h6-header" variant="h6">
-                            Enter grams per serving:
-                        </Typography>
                         <div className="dialogRow">
                             <TextField 
                                 variant="outlined"
                                 label="Grams per serving"
                                 onChange={e => this.setState({ gramsPerServing: e.target.value })}/>
                         </div>   
-
-                        <Typography className="h6-header" variant="h6">
-                            Enter calories per 100g:
-                        </Typography>
                         <div className="dialogRow">
                                 <TextField 
                                     variant="outlined"

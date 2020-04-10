@@ -1,0 +1,48 @@
+#activityPage {
+    display: flex;
+    flex-direction: column;
+    background-image: url("/activitypage_cover.jpeg");
+    width: 100%;
+    height: 100vh;
+    opacity: 70%;
+}
+
+#activityPage .MuiTypography-root {
+    margin: 10px;
+    align-self: center;
+}
+
+#activityPage .MuiTypography-h6 {
+    align-self: center;
+}
+
+#activityPage #dateSelectorBg {
+    background-color: white !important;
+    opacity: 90%;
+    width: 30%;
+    align-self: center;
+    padding-top: 20px;
+    margin: 20px;
+}
+
+#activityPage .paper {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+#activityPage .buttonRow {
+    display: flex;
+    flex-direction: row;
+    align-self: center;
+}
+
+#activityPage .paper {
+    width: 40%;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+#activityPage .button {
+    margin: 5px;
+}

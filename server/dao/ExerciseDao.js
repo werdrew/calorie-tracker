@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-class FoodDao {
+class ExerciseDao {
     constructor() {
         this.connection = mysql.createConnection({
             host: process.env.DB_HOST,
@@ -11,17 +11,15 @@ class FoodDao {
         });
     }
 
-    async createMeal(food) {
+    async createExercise(exercise) {
         const sql = `
-INSERT INTO food (name, type_id, grams_per_serving, calories_per_100g)
-VALUES (?, ?, ?, ?)
+INSERT INTO exercise (name, type_id)
+VALUES (?, ?)
 `;
         return new Promise((resolve, reject) => {
             this.connection.query(sql, [
-                food.name,
-                food.type,
-                food.gramsPerServing,
-                food.caloriesPer100G
+                exercise.name,
+                exercise.type
             ], (error, results, fields) => {
                 if (error) reject(error)
                 else {
@@ -31,19 +29,17 @@ VALUES (?, ?, ?, ?)
         });
     }
 
-    async editMeal(uid, mid, meal) {
+    async editExercise(uid, eid, exercise) {
         const sql = `
-UPDATE food
-SET name = ?, type_id = ?, grams_per_serving = ?, calories_per_100g = ?
+UPDATE exercise
+SET name = ?, type_id = ?
 WHERE id = ?;
 `;
         return new Promise((resolve, reject) => {
             this.connection.query(sql, [
-                meal.name,
-                meal.type,
-                meal.gramsPerServing,
-                meal.caloriesPer100G,
-                mid
+                exercise.name,
+                exercise.type,
+                eid
             ], (error, results, fields) => {
                 if (error) reject(error)
                 else {
@@ -53,13 +49,13 @@ WHERE id = ?;
         });
     }
 
-    async deleteMeal(mid) {
+    async deleteExercise(eid) {
         const sql = `
-DELETE FROM food WHERE id = ?
+DELETE FROM exercise WHERE id = ?
 `;
         return new Promise((resolve, reject) => {
             this.connection.query(sql, [
-                mid
+                eid
             ], (error, results, fields) => {
                 if (error) reject(error)
                 else {
@@ -69,12 +65,14 @@ DELETE FROM food WHERE id = ?
         });
     }
 
-    async getAllFoodItemsByType(type) {
+    async getAllExerciseItemsByType(tid, type) {
         const sql = `
-SELECT name, "${type}" AS type, grams_per_serving, calories_per_100g FROM food WHERE type_id = ?
+SELECT id, name, "${type}" AS type FROM exercise WHERE type_id = ?
 `;
         return new Promise((resolve, reject) => {
-            this.connection.query(sql, [type], (error, results, fields) => {
+            this.connection.query(sql, [
+                tid
+            ], (error, results, fields) => {
                 if (error) reject(error)
                 else {
                     resolve({ items: results });
@@ -83,35 +81,23 @@ SELECT name, "${type}" AS type, grams_per_serving, calories_per_100g FROM food W
         });
     }
 
-    async getFoodInfoByName(name) {
-        const sql = `SELECT id, grams_per_serving, calories_per_100g FROM food WHERE name = ?`;
-        return new Promise((resolve, reject) => {
-            this.connection.query(sql, [name], (error, results, fields) => {
-                if (error) reject(error)
-                else {
-                    resolve({ info: results[0] });
-                }
-            })
-        });
-    }
-
-    async getAllMealsCreatedByUser(fids) {
+    async getAllExercisesCreatedByUser(eids) {
         const sql = `
-SELECT id, name, type_id, grams_per_serving, calories_per_100g 
-FROM food
+SELECT id, name, type_id 
+FROM exercise
 WHERE id IN (?);
 `;
         return new Promise((resolve, reject) => {
             this.connection.query(sql, [
-                fids
+                eids
             ], (error, results, fields) => {
                 if (error) reject(error)
                 else {
-                    resolve({ success: true, meals: results });
+                    resolve({ success: true, exercises: results });
                 }
             })
         });
     }
 }
 
-module.exports = new FoodDao();
+module.exports = new ExerciseDao();

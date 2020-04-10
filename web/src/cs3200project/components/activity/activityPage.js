@@ -2,13 +2,13 @@ import React from 'react';
 import { Button, Paper, Typography } from '@material-ui/core';
 import DateSelector from '../date/dateSelector';
 import Log from '../table/log';
-import FoodEntriesDialog from '../dialog/foodEntriesDialog';
-import MealsDialog from '../dialog/mealsDialog';
-import FoodLogService from '../../service/nutrition/FoodLogService';
-import FoodService from '../../service/nutrition/FoodService';
-import "./nutritionPage.css";
+import ExerciseEntriesDialog from '../dialog/exerciseEntriesDialog';
+import ExercisesDialog from '../dialog/exercisesDialog';
+import ExerciseLogService from '../../service/activity/ExerciseLogService';
+import ExerciseService from '../../service/activity/ExerciseService';
+import "./activityPage.css";
 
-export default class NutritionPage extends React.Component {
+export default class ActivityPage extends React.Component {
     constructor(props) {
         super(props);
         this.today = new Date();
@@ -16,25 +16,25 @@ export default class NutritionPage extends React.Component {
             month: this.today.getMonth() + 1,
             day: this.today.getDate(),
             year: this.today.getYear() + 1900,
-            openMealsDialog: false,
+            openExercisesDialog: false,
             openEntriesDialog: false,
             rows: []
         };
-        this.foodLogService = new FoodLogService();
-        this.foodService = new FoodService();
+        this.exerciseLogService = new ExerciseLogService();
+        this.exerciseService = new ExerciseService();
     }
 
     async componentWillMount() {
         const date = `${this.state.month}-${this.state.day}-${this.state.year}`;
-        const rowData = await this.foodLogService.getLogsForDate(this.props.id, date);
-        const calData = await this.foodLogService.getTotalCaloriesForDate(this.props.id, date);
+        const rowData = await this.exerciseLogService.getLogsForDate(this.props.id, date);
+        const calData = await this.exerciseLogService.getTotalCaloriesForDate(this.props.id, date);
         this.setState({ rows: rowData.rows, calories: calData.calories });
     }
 
     async componentDidUpdate() {
         const date = `${this.state.month}-${this.state.day}-${this.state.year}`;
-        const rowData = await this.foodLogService.getLogsForDate(this.props.id, date);
-        const calData = await this.foodLogService.getTotalCaloriesForDate(this.props.id, date);
+        const rowData = await this.exerciseLogService.getLogsForDate(this.props.id, date);
+        const calData = await this.exerciseLogService.getTotalCaloriesForDate(this.props.id, date);
         if ((this.state.rows.length != rowData.rows.length) || this.state.justUpdated) {
             this.setState({ rows: rowData.rows, justUpdated: false });
         }
@@ -44,18 +44,18 @@ export default class NutritionPage extends React.Component {
     }
 
     getHeaders() {
-        return ['name', 'serving_size', 'calories_gained'];
+        return ['name', 'minutes_performed', 'calories_lost'];
     }
 
     getRows() {
         return this.state.rows;
     }
 
-    async onCreateEntry(foodLogEntry) {
-        foodLogEntry.user_id = this.props.id;
-        foodLogEntry.date = `${this.state.month}-${this.state.day}-${this.state.year}`
+    async onCreateEntry(exerciseLogEntry) {
+        exerciseLogEntry.user_id = this.props.id;
+        exerciseLogEntry.date = `${this.state.month}-${this.state.day}-${this.state.year}`
         try {
-            await this.foodLogService.createFoodLogEntry(this.props.id, foodLogEntry);
+            await this.exerciseLogService.createExerciseLogEntry(this.props.id, exerciseLogEntry);
             this.setState({ createEntrySucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
@@ -63,9 +63,9 @@ export default class NutritionPage extends React.Component {
         }
     }
 
-    async onEditEntry(foodLogEntry) {
+    async onEditEntry(exerciseLogEntry) {
         try {
-            await this.foodLogService.editFoodLogEntry(foodLogEntry);
+            await this.exerciseLogService.editExerciseLogEntry(exerciseLogEntry);
             this.setState({ editEntrySucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
@@ -73,9 +73,9 @@ export default class NutritionPage extends React.Component {
         }
     }
 
-    async onDeleteEntry(foodLogEntry) {
+    async onDeleteEntry(exerciseLogEntry) {
         try {
-            await this.foodLogService.deleteFoodLogEntry(foodLogEntry);
+            await this.exerciseLogService.deleteExerciseLogEntry(exerciseLogEntry);
             this.setState({ deleteEntrySucceeded: true, justUpdated: true })
         } catch (e) {
             console.log(e);
@@ -83,39 +83,39 @@ export default class NutritionPage extends React.Component {
         }
     }
 
-    async onCreateMeal(meal) {
+    async onCreateExercise(exercise) {
         try {
-            await this.foodService.createMeal(this.props.id, meal);
-            this.setState({ createMealSucceeded: true, justUpdated: true });
+            await this.exerciseService.createExercise(this.props.id, exercise);
+            this.setState({ createExerciseSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ createMealSucceeded: false });
+            this.setState({ createExerciseSucceeded: false });
         }
     }
 
-    async onEditMeal(meal) {
+    async onEditExercise(exercise) {
         try {
-            await this.foodService.editMeal(this.props.id, meal);
-            this.setState({ editMealSucceeded: true, justUpdated: true })
+            await this.exerciseService.editExercise(this.props.id, exercise);
+            this.setState({ editExerciseSucceeded: true, justUpdated: true })
         } catch (e) {
             console.log(e);
-            this.setState({ editMealSucceeded: false })
+            this.setState({ editExerciseSucceeded: false })
         }
     }
 
-    async onDeleteMeal(mealId) {
+    async onDeleteExercise(exerciseId) {
         try {
-            await this.foodService.deleteMeal(this.props.id, mealId);
-            this.setState({ deleteMealSucceeded: true, justUpdated: true });
+            await this.exerciseService.deleteExercise(this.props.id, exerciseId);
+            this.setState({ deleteExerciseSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ deleteMealSucceeded: false })
+            this.setState({ deleteExerciseSucceeded: false })
         }
     }
 
     render() {
         return (
-            <div id="nutritionPage">
+            <div id="activityPage">
                 <div id="dateSelectorBg">
                     <DateSelector
                         title="Select a date:"
@@ -128,13 +128,13 @@ export default class NutritionPage extends React.Component {
                     <div className="buttonRow">
                         <Button 
                             className="button"
-                            onClick={() => this.setState({ openMealsDialog: true })}
+                            onClick={() => this.setState({ openExercisesDialog: true })}
                         >
-                            View Your Meals
+                            View Your Exercises
                         </Button>
                     </div>
                     <Typography variant="h3">
-                        Nutrition Log
+                        Exercise Log
                     </Typography>
                     <Log
                         headers={this.getHeaders()}
@@ -142,7 +142,7 @@ export default class NutritionPage extends React.Component {
                         />
                     
                     <Typography variant="h6">
-                        Calories gained today: {this.state.calories}
+                        Calories lost today: {this.state.calories}
                     </Typography>
                     <div className="buttonRow">
                         <Button
@@ -154,19 +154,19 @@ export default class NutritionPage extends React.Component {
                     </div>
                 </Paper>
 
-                {this.state.openMealsDialog &&
-                    <MealsDialog
-                        title={`Your Meals`}
-                        open={this.state.openMealsDialog}
-                        onClose={() => this.setState({ openMealsDialog: false })}
-                        onCreateMeal={this.onCreateMeal.bind(this)}
-                        onEditMeal={this.onEditMeal.bind(this)}
-                        onDeleteMeal={this.onDeleteMeal.bind(this)}
+                {this.state.openExercisesDialog &&
+                    <ExercisesDialog
+                        title={`Your Exercises`}
+                        open={this.state.openExercisesDialog}
+                        onClose={() => this.setState({ openExercisesDialog: false })}
+                        onCreateExercise={this.onCreateExercise.bind(this)}
+                        onEditExercise={this.onEditExercise.bind(this)}
+                        onDeleteExercise={this.onDeleteExercise.bind(this)}
                         {...this.props}/>
                 }
 
                 {this.state.openEntriesDialog &&
-                    <FoodEntriesDialog
+                    <ExerciseEntriesDialog
                         title={`Add/Edit Entries`}
                         open={this.state.openEntriesDialog}
                         onClose={() => this.setState({ openEntriesDialog: false })}

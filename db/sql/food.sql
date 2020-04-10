@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS cs3200_project.food (
     calories_per_100g INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (type_id) REFERENCES cs3200_project.food_type(id)
-		ON UPDATE RESTRICT ON DELETE RESTRICT
+      ON UPDATE RESTRICT ON DELETE RESTRICT
 );
 
 -- This table defines types of foods.
 CREATE TABLE IF NOT EXISTS cs3200_project.food_type (
 	id INT NOT NULL AUTO_INCREMENT,
 	type VARCHAR(255) NOT NULL UNIQUE,
-    PRIMARY KEY (id)
+  PRIMARY KEY (id)
 );
 DROP TABLE food_type;
 
@@ -28,22 +28,22 @@ CREATE TABLE IF NOT EXISTS cs3200_project.food_log (
     num_grams INT,
     calories_gained DECIMAL(20, 3) DEFAULT 0 NOT NULL, -- derived
     PRIMARY KEY (user_id, food_id, date),
-	FOREIGN KEY (food_id) REFERENCES cs3200_project.food(id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
+	  FOREIGN KEY (food_id) REFERENCES cs3200_project.food(id)
+		  ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES cs3200_project.user(id)
-		ON UPDATE CASCADE ON DELETE CASCADE
+		  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- This table defines "ownership" of a food item -- a user owns a food if they created it.
 -- If no user owns it, then it can't be deleted and it's one of the pre-entered foods.
 CREATE TABLE IF NOT EXISTS cs3200_project.user_food (
     user_id INT NOT NULL,
-	food_id INT NOT NULL,
+	  food_id INT NOT NULL,
     PRIMARY KEY (food_id, user_id),
-	FOREIGN KEY (food_id) REFERENCES cs3200_project.food(id)
-		ON UPDATE CASCADE ON DELETE CASCADE,
+	  FOREIGN KEY (food_id) REFERENCES cs3200_project.food(id)
+	    ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES cs3200_project.user(id)
-		ON UPDATE CASCADE ON DELETE CASCADE
+		  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Triggers

@@ -12,7 +12,6 @@ class FoodLogController {
 
     async createFoodLogEntry(req, res) {
         const foodLogEntry = req.body;
-        console.log(foodLogEntry);
         try {
             const response = await FoodLogService.createFoodLogEntry(foodLogEntry);
             res.send(response);
@@ -33,7 +32,6 @@ class FoodLogController {
     }
 
     async deleteFoodLogEntry(req, res) {
-        console.log('I reached here')
         const { uid, date, fid } = req.params;
         try {
             const response = await FoodLogService.deleteFoodLogEntry(uid, date, fid);
