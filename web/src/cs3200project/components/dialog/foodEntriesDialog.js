@@ -110,7 +110,7 @@ export default class FoodEntriesDialog extends React.Component {
                 <Button
                     className="button"
                     onClick={() => this.props.onCreateEntry({
-                        food_id: this.state.foodInfo.id,
+                        food_id: this.state.foodInfo.info.id,
                         num_servings: this.state.enterServings ? parseInt(this.state.servingSize) : null,
                         num_grams: this.state.enterServings ? null: parseInt(this.state.servingSize)
                     })}
@@ -129,7 +129,6 @@ export default class FoodEntriesDialog extends React.Component {
                     <Select
                         onChange={e => this.setState({ entryToEdit: e.target.value })}>
                         {this.props.entries.map(entry => {
-                            console.log(entry);
                             return <MenuItem value={entry}>{entry.name}</MenuItem>
                         })}
                     </Select>
