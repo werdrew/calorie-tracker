@@ -12,32 +12,38 @@ export default class FoodEntriesDialog extends React.Component {
             types: [],
             foodItems: [],
             enterServings: true,
-            editServings: true
+            editServings: true,
+            selectedType: null,
+            selectedFoodItem: null,
+            foodSelected: false
         }
         this.foodService = new FoodService();
     }
 
     async componentWillMount() {
         const foodTypes = await this.foodService.getAllFoodTypes();
-        this.setState({ types: foodTypes.types } );
+        await this.applyFoodType(foodTypes.types[0]);
+        this.setState({ types: foodTypes.types} );
     }
 
-    async applyFoodType() {
-        if (!this.state.selectedType) {
+    async applyFoodType(type) {
+        if (!type) {
             this.setState({ failedToApplyFoodType: true })
         }
         else {
+            await this.setState({selectedType: type});
             const foodItems = await this.foodService.getAllFoodItemsByType(this.state.selectedType);
-            this.setState({ failedToApplyFoodType: false, foodItems: foodItems.items });
+            await this.setState({ failedToApplyFoodType: false, foodItems: foodItems.items, foodSelected: false });
         };
     }
 
-    async applySelectedFoodItem() {
-        if (!this.state.selectedFoodItem) {
+    async applySelectedFoodItem(food) {
+        if (!food) {
             this.setState({ failedToApplyFoodItem: true });
         } else {
+            await this.setState({selectedFoodItem: food });
             const foodInfo = await this.foodService.getFoodInfoByName(this.state.selectedFoodItem);
-            this.setState({ foodInfo: foodInfo.info }, () => {
+            await this.setState({ foodInfo: foodInfo }, () => {
                 this.setState({ failedToApplyFoodItem: false, foodSelected: true })
             });
         }
@@ -52,63 +58,53 @@ export default class FoodEntriesDialog extends React.Component {
             <div id="addMode">
                 <Typography className="h6-header" variant="h6">Select a food type:</Typography>
                 <div className="dialogRow">
-                    <Select 
-                        value={this.state.selectedType || this.state.types[0]}
-                        onChange={e => this.setState({ selectedType: e.target.value })}>
-                            {this.state.types.map(type => {
-                                return <MenuItem value={type}>{type}</MenuItem>
-                            })}
+                    <Select
+                        value={this.state.selectedType}
+                        onChange= {e => this.applyFoodType(e.target.value)}>
+                        {this.state.types.map(type => {
+                            return <MenuItem value={type}>{type}</MenuItem>
+                        })}
                     </Select>
-                    <Button
-                            className="button"
-                            onClick={() => this.applyFoodType()}>
-                            Apply
-                    </Button>
                 </div>
-                
+
                 <Typography className="h6-header" variant="h6">Select a food item:</Typography>
                 <div className="dialogRow">
-                    <Select 
+                    <Select
                         value={this.state.selectedFoodItem || this.state.foodItems[0]}
-                        onChange={e => this.setState({ selectedFoodItem: e.target.value })}>
-                            {this.state.foodItems.map(item => {
-                                return <MenuItem value={item.name}>{item.name}</MenuItem>
-                            })}
+                        onChange={e => this.applySelectedFoodItem(e.target.value)}>
+                        {this.state.foodItems.map(item => {
+                            return <MenuItem value={item.name}>{item.name}</MenuItem>
+                        })}
                     </Select>
-                    <Button
-                            className="button"
-                            onClick={() => this.applySelectedFoodItem()}>
-                            Apply
-                    </Button>
                 </div>
 
                 {this.state.foodSelected &&
-                    <div className="foodInfoSection">
-                        <div className="dialogRow foodInfo">
-                        <text className="text">{this.state.foodInfo.grams_per_serving} grams per serving</text>
-                        <text className="text">{this.state.foodInfo.calories_per_100g} calories per 100g</text>
-                        </div>
-
-                        <div className="dialogColumn">
-                            <Typography className="h6-header" variant="h6">
-                                {this.state.enterServings
-                                    ? "Number of servings:"
-                                    : "Number of grams:"}
-                            </Typography>
-                            <Button
-                                className="button"
-                                onClick={() => this.setState({ enterServings: !this.state.enterServings })}>
-                                {this.state.enterServings
-                                    ? "Enter grams instead?"
-                                    : "Enter servings instead?"}
-                            </Button>                        
-                        </div>
-                        <div className="dialogRow">
-                            <TextField
-                                variant="outlined"
-                                onChange={e => this.setState({ servingSize: e.target.value })}/>
-                        </div>
+                <div className="foodInfoSection">
+                    <div className="dialogRow foodInfo">
+                        <text className="text">{this.state.foodInfo.info.grams_per_serving} grams per serving</text>
+                        <text className="text">{this.state.foodInfo.info.calories_per_100g} calories per 100g</text>
                     </div>
+
+                    <div className="dialogColumn">
+                        <Typography className="h6-header" variant="h6">
+                            {this.state.enterServings
+                                ? "Number of servings:"
+                                : "Number of grams:"}
+                        </Typography>
+                        <Button
+                            className="button"
+                            onClick={() => this.setState({ enterServings: !this.state.enterServings })}>
+                            {this.state.enterServings
+                                ? "Enter grams instead?"
+                                : "Enter servings instead?"}
+                        </Button>
+                    </div>
+                    <div className="dialogRow">
+                        <TextField
+                            variant="outlined"
+                            onChange={e => this.setState({ servingSize: e.target.value })}/>
+                    </div>
+                </div>
                 }
 
                 <Button
@@ -132,28 +128,28 @@ export default class FoodEntriesDialog extends React.Component {
                 <div className="dialogRow">
                     <Select
                         onChange={e => this.setState({ entryToEdit: e.target.value })}>
-                            {this.props.entries.map(entry => {
-                                console.log(entry);
-                                return <MenuItem value={entry}>{entry.name}</MenuItem>
-                            })}
+                        {this.props.entries.map(entry => {
+                            console.log(entry);
+                            return <MenuItem value={entry}>{entry.name}</MenuItem>
+                        })}
                     </Select>
                 </div>
                 { this.state.entryToEdit &&
-                    <div className="dialogRow">
-                        <div className="dialogColumn">
-                            <Typography className="h6-header" variant="h6">
-                                {this.state.editServings
-                                    ? "Number of servings:"
-                                    : "Number of grams:"}
-                            </Typography>
-                            <Button
-                                className="button"
-                                onClick={() => this.setState({ editServings: !this.state.editServings })}>
-                                {this.state.editServings
-                                    ? "Enter grams instead?"
-                                    : "Enter servings instead?"}
-                            </Button>
-                            <div className="dialogRow">
+                <div className="dialogRow">
+                    <div className="dialogColumn">
+                        <Typography className="h6-header" variant="h6">
+                            {this.state.editServings
+                                ? "Number of servings:"
+                                : "Number of grams:"}
+                        </Typography>
+                        <Button
+                            className="button"
+                            onClick={() => this.setState({ editServings: !this.state.editServings })}>
+                            {this.state.editServings
+                                ? "Enter grams instead?"
+                                : "Enter servings instead?"}
+                        </Button>
+                        <div className="dialogRow">
                             <TextField
                                 variant="outlined"
                                 onChange={e => {
@@ -167,9 +163,9 @@ export default class FoodEntriesDialog extends React.Component {
                                     }
                                     this.setState({ entryToEdit: updatedEntry });
                                 }}/>
-                            </div>                      
                         </div>
                     </div>
+                </div>
                 }
                 <div className="buttonRow">
                     <Button
@@ -193,16 +189,16 @@ export default class FoodEntriesDialog extends React.Component {
         return (
             <Dialog className="formDialog" open={this.props.open}>
                 <DialogTitle>
-                    {this.props.title}    
+                    {this.props.title}
                 </DialogTitle>
-                {this.state.addMode 
+                {this.state.addMode
                     ? this.renderAddMode()
                     : this.renderEditMode()
                 }
                 {this.state.failedToApplyFoodType &&
-                    <Typography variant="h5" color="error">Please select a food type.</Typography>}
+                <Typography variant="h5" color="error">Please select a food type.</Typography>}
                 {this.state.failedToApplyFoodItem &&
-                    <Typography variant="h5" color="error">Please select a food item.</Typography>}
+                <Typography variant="h5" color="error">Please select a food item.</Typography>}
                 <div className="buttonRow">
                     <Button
                         className="button"
@@ -211,15 +207,15 @@ export default class FoodEntriesDialog extends React.Component {
                     </Button>
                 </div>
                 <Button
-                        className="button"
-                        onClick={() => this.setState({ 
-                            addMode: !this.state.addMode,
-                            entryToEdit: undefined,
-                            foodSelected: undefined,
-                            servingSize: undefined,
-                            selectedType: undefined,
-                            selectedFoodItem: undefined })}>
-                        {this.state.addMode ? "Enter Edit Mode" : "Enter Add Mode"}
+                    className="button"
+                    onClick={() => this.setState({
+                        addMode: !this.state.addMode,
+                        entryToEdit: undefined,
+                        foodSelected: undefined,
+                        servingSize: undefined,
+                        selectedType: undefined,
+                        selectedFoodItem: undefined })}>
+                    {this.state.addMode ? "Enter Edit Mode" : "Enter Add Mode"}
                 </Button>
             </Dialog>
         )
