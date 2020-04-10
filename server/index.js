@@ -4,3 +4,4 @@ require('./controller/FoodController');
 require('./controller/FoodLogController');
 require('./controller/ExerciseController');
 require('./controller/ExerciseLogController');
+require('./controller/StatisticsController');

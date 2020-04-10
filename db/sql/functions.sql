@@ -1,3 +1,16 @@
+-- Template.
+DELIMITER //
+CREATE FUNCTION function_template
+(
+	var -- INPUT TYPE
+)
+RETURNS -- RETURN TYPE
+DETERMINISTIC READS SQL DATA
+BEGIN
+    -- BODY
+END//
+DELIMITER ;
+
 -- Calculate BMR using Mifflin St. Jeor formula,
 -- given a user's age, height, weight, and sex.
 DELIMITER //
@@ -72,5 +85,49 @@ BEGIN
     SET calories = num_grams * cals_per_g;
     
     RETURN calories;
+END//
+DELIMITER ;
+
+-- Calculate the number of calories gained by a user on a date.
+DELIMITER //
+CREATE FUNCTION get_cals_in_for_date
+(
+	date DATE,
+    uid INT
+)
+RETURNS INT
+DETERMINISTIC READS SQL DATA
+BEGIN
+	DECLARE cals_in_for_date DECIMAL(20, 2);
+    
+    SELECT SUM(fl.calories_gained)
+    INTO cals_in_for_date
+	FROM food_log fl
+	WHERE fl.user_id = uid
+	AND fl.date = date;
+
+	RETURN IFNULL(cals_in_for_date, 0);
+END//
+DELIMITER ;
+
+-- Calculate the number of calories lost by a user on a date.
+DELIMITER //
+CREATE FUNCTION get_cals_out_for_date
+(
+	date DATE,
+    uid INT
+)
+RETURNS INT
+DETERMINISTIC READS SQL DATA
+BEGIN
+	DECLARE cals_out_for_date DECIMAL(20, 2);
+
+    SELECT SUM(el.calories_lost)
+    INTO cals_out_for_date
+	FROM exercise_log el
+	WHERE el.user_id = uid
+	AND el.date = date;
+    
+    RETURN IFNULL(cals_out_for_date, 0);
 END//
 DELIMITER ;

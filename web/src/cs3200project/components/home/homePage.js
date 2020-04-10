@@ -1,10 +1,23 @@
 import React from 'react';
-import { Container, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import StatisticsService from '../../service/StatisticsService';
 import "./homePage.css"
 
 export default class HomePage extends React.Component {
     constructor(props) {
         super(props)
+        this.today = new Date();
+        this.statisticsService = new StatisticsService();
+        this.state = ({
+            netCalories: 0
+        })
+    }
+
+    async componentWillMount() {
+        const formattedDate = `${this.today.getYear() + 1900}-0${this.today.getMonth() + 1}-${this.today.getDate()}`
+        const response = await this.statisticsService.getNetCaloriesForToday(this.props.id, formattedDate);
+        console.log(response);
+        this.setState({ netCalories: response.netCalories || this.state.netCalories });
     }
 
     render() {
@@ -19,7 +32,7 @@ export default class HomePage extends React.Component {
                     </Typography>
                     <Typography className="homePageText" variant="h6">
                         {this.props.loggedIn
-                        ? 'Please click on one of the links above to access this app\'s features.'
+                        ? `Your net calories for today are: ${this.state.netCalories}.`
                         : 'Please click on one of the links above to login or register for a new account.'
                         }
                     </Typography>
