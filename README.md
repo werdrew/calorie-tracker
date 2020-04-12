@@ -8,6 +8,13 @@
 
 `node v13.12.0` and `npm 6.14.4` were used in the writing of this project.
 
+Additionally, `MySQL` must be installed; specifically, we used version `8.0.19`. MySQL workbench
+can also be installed to more easily import and interact with the data (also version `8.0.19`).
+Please download at the following links:
+
+[Download for MySQL](https://dev.mysql.com/downloads/installer/)
+[Download for MySQL workbench](https://dev.mysql.com/downloads/workbench/)
+
 ## Building and running the front-end
 
 Switch to the `web` directory and edit the `.env` file in the project root, in the same
