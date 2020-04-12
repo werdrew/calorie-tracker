@@ -19,7 +19,7 @@ class FoodController {
             const response = await FoodService.createMeal(uid, meal);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -30,7 +30,7 @@ class FoodController {
             const response = await FoodService.editMeal(uid, mid, meal);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -40,7 +40,7 @@ class FoodController {
             const response = await FoodService.deleteMeal(uid, mid);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -50,7 +50,7 @@ class FoodController {
             const response = await FoodService.getAllMealsCreatedByUser(uid);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -59,7 +59,7 @@ class FoodController {
             const response = await FoodService.getAllFoodTypes();
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -69,7 +69,7 @@ class FoodController {
             const response = await FoodService.getAllFoodItemsByType(type);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 
@@ -79,7 +79,7 @@ class FoodController {
             const response = await FoodService.getFoodInfoByName(name);
             res.send(response);
         } catch(e) {
-            console.log(e);
+            res.send(e);
         }
     }
 }
