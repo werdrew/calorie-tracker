@@ -16,7 +16,6 @@ export default class HomePage extends React.Component {
     async componentWillMount() {
         const formattedDate = `${this.today.getYear() + 1900}-0${this.today.getMonth() + 1}-${this.today.getDate()}`
         const response = await this.statisticsService.getNetCaloriesForToday(this.props.id, formattedDate);
-        console.log(response);
         this.setState({ netCalories: response.netCalories || this.state.netCalories });
     }
 
@@ -32,7 +31,7 @@ export default class HomePage extends React.Component {
                     </Typography>
                     <Typography className="homePageText" variant="h6">
                         {this.props.loggedIn
-                        ? `Your net calories for today are: ${this.state.netCalories}.`
+                        ? `Your net calories for today (calories in - calories out - basal metabolic rate) are: ${this.state.netCalories}.`
                         : 'Please click on one of the links above to login or register for a new account.'
                         }
                     </Typography>
