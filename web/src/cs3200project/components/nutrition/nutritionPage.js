@@ -56,60 +56,60 @@ export default class NutritionPage extends React.Component {
         foodLogEntry.date = `${this.state.month}-${this.state.day}-${this.state.year}`
         try {
             await this.foodLogService.createFoodLogEntry(this.props.id, foodLogEntry);
-            this.setState({ createEntrySucceeded: true, justUpdated: true });
+            this.setState({ operationSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ createEntrySucceeded: false });
+            this.setState({ operationSucceeded: false, error: e });
         }
     }
 
     async onEditEntry(foodLogEntry) {
         try {
             await this.foodLogService.editFoodLogEntry(foodLogEntry);
-            this.setState({ editEntrySucceeded: true, justUpdated: true });
+            this.setState({ operationSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ editEntrySucceeded: false });
+            this.setState({ operationSucceeded: false });
         }
     }
 
     async onDeleteEntry(foodLogEntry) {
         try {
             await this.foodLogService.deleteFoodLogEntry(foodLogEntry);
-            this.setState({ deleteEntrySucceeded: true, justUpdated: true })
+            this.setState({ operationSucceeded: true, justUpdated: true })
         } catch (e) {
             console.log(e);
-            this.setState({ deleteEntrySucceeded: false })
+            this.setState({ operationSucceeded: false })
         }
     }
 
     async onCreateMeal(meal) {
         try {
             await this.foodService.createMeal(this.props.id, meal);
-            this.setState({ createMealSucceeded: true, justUpdated: true });
+            this.setState({ operationSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ createMealSucceeded: false });
+            this.setState({ operationSucceeded: false });
         }
     }
 
     async onEditMeal(meal) {
         try {
             await this.foodService.editMeal(this.props.id, meal);
-            this.setState({ editMealSucceeded: true, justUpdated: true })
+            this.setState({ operationSucceeded: true, justUpdated: true })
         } catch (e) {
             console.log(e);
-            this.setState({ editMealSucceeded: false })
+            this.setState({ operationSucceeded: false })
         }
     }
 
     async onDeleteMeal(mealId) {
         try {
             await this.foodService.deleteMeal(this.props.id, mealId);
-            this.setState({ deleteMealSucceeded: true, justUpdated: true });
+            this.setState({ operationSucceeded: true, justUpdated: true });
         } catch (e) {
             console.log(e);
-            this.setState({ deleteMealSucceeded: false })
+            this.setState({ operationSucceeded: false })
         }
     }
 
@@ -152,6 +152,13 @@ export default class NutritionPage extends React.Component {
                             Edit Entries
                         </Button>
                     </div>
+
+                    {this.state.operationSucceeded &&
+                    <Typography variant="h6" color="primary">Success!</Typography>}
+
+                    {this.state.operationSucceeded === false &&
+                    <Typography variant="h6" color="error">Error! {this.state.error.message}</Typography>}
+
                 </Paper>
 
                 {this.state.openMealsDialog &&
@@ -176,7 +183,6 @@ export default class NutritionPage extends React.Component {
                         entries={this.state.rows}
                         {...this.props}/>
                 }
-
             </div>
         )
     }
