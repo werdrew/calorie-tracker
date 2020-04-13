@@ -16,7 +16,7 @@ export default class HomePage extends React.Component {
     async componentWillMount() {
         const formattedDate = `${this.today.getYear() + 1900}-0${this.today.getMonth() + 1}-${this.today.getDate()}`
         const response = await this.statisticsService.getNetCaloriesForToday(this.props.id, formattedDate);
-        this.setState({ netCalories: response.netCalories || this.state.netCalories });
+        this.setState({ netCalories: response ? response.netCalories : this.state.netCalories });
     }
 
     render() {
