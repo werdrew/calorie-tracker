@@ -29,7 +29,7 @@ export default class ExercisesDialog extends React.Component {
     async componentDidUpdate() {
         const exerciseTypes = await this.exerciseService.getAllExerciseTypes();
         const userCreatedExercises = await this.exerciseService.getAllExercisesCreatedByUser(this.props.id);
-        if (this.state.userCreatedExercises.length != userCreatedExercises.length || this.state.justUpdated) {
+        if (this.state.userCreatedExercises.length !== userCreatedExercises.length || this.state.justUpdated) {
             this.setState({
                 types: exerciseTypes.types,
                 userCreatedExercises,

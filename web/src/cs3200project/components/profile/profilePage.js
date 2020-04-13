@@ -1,10 +1,7 @@
 import React from 'react';
 import { 
-    Button,
-    Container, FormControl, InputLabel,
-    Select, MenuItem, Radio,
-    Paper, Typography, TextField,
-    FormLabel, RadioGroup, FormControlLabel
+    Button, Radio, Paper, Typography,
+    TextField, FormLabel, RadioGroup, FormControlLabel
 } from '@material-ui/core';
 import DateSelector from '../date/dateSelector';
 import UserService from '../../service/auth/UserService';

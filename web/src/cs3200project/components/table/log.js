@@ -6,10 +6,6 @@ import {
 import "./log.css";
 
 export default class Log extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     renderHead() {
         return (
             <TableRow>
@@ -26,7 +22,7 @@ export default class Log extends React.Component {
                 return <TableRow>
                     {this.props.headers.map(header => {
                         return <TableCell>
-                            {header == 'serving_size' 
+                            {header === 'serving_size' 
                                 ? row['num_servings'] || row['num_grams'] + "g"
                                 : row[header]}
                         </TableCell>

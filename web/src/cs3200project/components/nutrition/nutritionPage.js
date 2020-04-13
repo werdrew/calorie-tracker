@@ -35,10 +35,10 @@ export default class NutritionPage extends React.Component {
         const date = `${this.state.month}-${this.state.day}-${this.state.year}`;
         const rowData = await this.foodLogService.getLogsForDate(this.props.id, date);
         const calData = await this.foodLogService.getTotalCaloriesForDate(this.props.id, date);
-        if ((this.state.rows.length != rowData.rows.length) || this.state.justUpdated) {
+        if ((this.state.rows.length !== rowData.rows.length) || this.state.justUpdated) {
             this.setState({ rows: rowData.rows, justUpdated: false });
         }
-        if (this.state.calories != calData.calories) {
+        if (this.state.calories !== calData.calories) {
             this.setState({ calories: calData.calories });
         }
     }

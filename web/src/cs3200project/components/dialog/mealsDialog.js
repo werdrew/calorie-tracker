@@ -29,7 +29,7 @@ export default class MealsDialog extends React.Component {
     async componentDidUpdate() {
         const foodTypes = await this.foodService.getAllFoodTypes();
         const userCreatedMeals = await this.foodService.getAllMealsCreatedByUser(this.props.id);
-        if (this.state.userCreatedMeals.length != userCreatedMeals.length || this.state.justUpdated) {
+        if (this.state.userCreatedMeals.length !== userCreatedMeals.length || this.state.justUpdated) {
             this.setState({ 
                 types: foodTypes.types, 
                 userCreatedMeals,
