@@ -32,7 +32,6 @@ WHERE username = ?`;
             this.connection.query(sql, [sex, dob, height, weight, username], (error, results, fields) => {
                 if (error) resolve({ success: false, err: `Error while updating user! ${error.message}`});
                 else {
-                    console.log(results);
                     resolve({ success: true });
                 }
             });
@@ -77,7 +76,7 @@ WHERE username = ?`;
                             resolve({ success: false, err: `Registration error: Error while creating user! ${error}` });
                         }
                         else {
-                            resolve({ success: true });
+                            resolve({ success: true, id: results.insertId });
                         }
                     });
                 }

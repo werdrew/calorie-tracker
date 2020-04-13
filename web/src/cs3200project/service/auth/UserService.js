@@ -52,7 +52,6 @@ export default class UserService {
             .catch(e => {
                 console.log(`Error registering (front-end!): ${e.message}`);
             });
-        console.log(response);
         return response.data;
     }
 }

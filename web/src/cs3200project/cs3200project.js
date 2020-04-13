@@ -52,7 +52,8 @@ export default class CS3200Project extends React.Component {
             if (registered) {
                 this.setState({
                     loggedIn: true,
-                    username: formData.username.toLowerCase()
+                    username: formData.username.toLowerCase(),
+                    id: data.id
                 });
             }
             else {
